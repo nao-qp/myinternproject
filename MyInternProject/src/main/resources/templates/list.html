@@ -3,10 +3,37 @@
  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  layout:decorate="~{layout/layout}">
 <head>
+<!-- JS読込 -->
+<script th:src="@{/js/list.js}" defer></script>
 </head>
 <body>
 <div layout:fragment="content">
-	<p>リスト</p>
+  <!-- 申請一覧 -->
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">日付</th>
+      <th scope="col">残業予定時間（開始）</th>
+      <th scope="col">残業予定時間（終了）</th>
+      <th scope="col">残業理由</th>
+      <th scope="col">次長確認</th>
+    </tr>
+  </thead>
+  <tbody>
+
+        <!-- 行のリンク先を data-href 属性に設定 -->
+    　<tr th:each="request : ${requestList}" 
+        th:attr="data-href=@{/request/detail/{id}(id=${request.id})}"
+        style="cursor: pointer;">
+      <th scope="row" th:text="${request.requestDate}"></th>
+      <td th:text="${request.startTime}"></td>
+      <td th:text="${request.endTime}"></td>
+      <td th:text="${request.reason}"></td>
+      <td th:text="${request.isChecked == 0 ? '' : '確認済'}"></td>
+    </tr>
+
+  </tbody>
+</table>
 	
 </div>
 </body>

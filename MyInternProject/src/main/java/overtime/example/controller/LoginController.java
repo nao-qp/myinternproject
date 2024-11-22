@@ -14,6 +14,7 @@ public class LoginController {
   //ログインページ表示
   @GetMapping("/user/login")
   public String getLogin(Model model, LoginForm form, Locale locale) {
+	  model.addAttribute("page", "login");
   return "user/login";
   }
  

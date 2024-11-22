@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import overtime.example.domain.user.model.Users;
+import overtime.example.domain.user.model.LoginUsers;
 import overtime.example.domain.user.service.UserService;
 
 @Service
@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throws UsernameNotFoundException {
 
 		//ユーザー情報取得
-		Users loginUser = service.getLoginUser(username);
+		LoginUsers loginUser = service.getLoginUser(username);
 
 		//ユーザーが存在しない場合
 		if (loginUser == null) {
