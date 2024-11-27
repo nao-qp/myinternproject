@@ -8,6 +8,12 @@
 </head>
 <body>
 <div layout:fragment="content">
+  <div class="text-center">
+	  <h3>残 業 申 請 一 覧</h3>
+  </div>
+  <div>
+	 <a class="btn btn-primary" th:text="新規作成" href="/request/add"></a>
+  </div>
   <!-- 申請一覧 -->
   <table class="table">
   <thead>
@@ -22,7 +28,7 @@
   <tbody>
 
         <!-- 行のリンク先を data-href 属性に設定 -->
-    　<tr th:each="request : ${requestList}" 
+    <tr th:each="request : ${requestList}" 
         th:attr="data-href=@{/request/detail/{id}(id=${request.id})}"
         style="cursor: pointer;">
       <th scope="row" th:text="${request.requestDate}"></th>

@@ -38,3 +38,36 @@ VALUE (4, '人事部', '3');
 
 INSERT INTO departments (id, name)
 VALUE (1, '営業部');
+
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (1, '早出A', '05:30:00', '14:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (2, '早出B', '06:00:00', '14:45:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (3, '早出C', '06:30:00', '15:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (4, '早出D', '07:00:00', '15:45:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (5, '早出E', '07:30:00', '16:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (6, '早出F', '08:00:00', '16:45:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (7, '通常A', '08:30:00', '17:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (8, '通常B', '09:00:00', '17:45:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (9, '通常C', '09:30:00', '18:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (10, '遅出A', '10:00:00', '18:45:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (11, '遅出B', '10:30:00', '19:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (12, '遅出C', '11:00:00', '19:45:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (13, '遅出D', '11:30:00', '20:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (14, '遅出E', '12:00:00', '20:45:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (15, '遅出F', '12:30:00', '21:15:00');
+INSERT INTO work_patterns (id, name, start_time, end_time)
+VALUE (16, '遅出G', '13:00:00', '21:45:00');

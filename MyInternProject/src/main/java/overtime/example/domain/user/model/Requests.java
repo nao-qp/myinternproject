@@ -11,7 +11,7 @@ public class Requests {
 	private Integer id;
 	private Integer usersId;
 	private Integer departmentsId;
-	private Integer work_patternsId;
+	private Integer workPatternsId;
 	private LocalDate requestDate;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
@@ -23,6 +23,7 @@ public class Requests {
 	private String approvalStatus;
 	private LocalDateTime createDateTime;
 	private LocalDateTime updateDateTime;
+	private String usersName;
 	private String departmentsName;
 	private String approvalUsersName;
 }

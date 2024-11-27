@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/layout}">
+<head>
+<!-- JS読込 -->
+<script th:src="@{/js/list.js}" defer></script>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="text-center">
+	  <h3>残 業 申 請 （ 確 認 ） 一 覧</h3>
+  </div>
+  <form method="post" th:action="@{/check/request/execute}">
+	<div class="text-end">
+	   <button type="submit" class="btn btn-primary">確認更新</button>
+	</div>
+  	<!-- 申請一覧 -->
+	<table class="table">
+	  <thead>
+	    <tr>
+	      <th scope="col">日付</th>
+	      <th scope="col">申請者</th>
+	      <th scope="col">残業予定時間（開始）</th>
+	      <th scope="col">残業予定時間（終了）</th>
+	      <th scope="col">残業理由</th>
+	      <th scope="col" class="text-center">次長確認</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	
+	    <!-- 行のリンク先を data-href 属性に設定 -->
+	    <tr th:each="request : ${requestList}" 
+	        th:attr="data-href=@{/request/detail/{id}(id=${request.id})}"
+	        style="cursor: pointer;">
+	      <th scope="row" th:text="${request.requestDate}"></th>
+	      <td th:text="${request.usersName}"></td>
+	      <td th:text="${request.startTime}"></td>
+	      <td th:text="${request.endTime}"></td>
+	      <td th:text="${request.reason}"></td>
+	      <!-- 確認欄はリンクなし -->
+	      <td class="d-flex justify-content-center" th:onclick="event.stopPropagation();">
+	          <!-- チェックボックスを表示 -->
+	          <div>
+	          <input type="checkbox" name="checkedRequests" th:value="${request.id}" />
+	          </div>
+		  </td>
+	    </tr>
+	
+	  </tbody>
+	</table>
+  </form>
+	
+</div>
+</body>
+</html>

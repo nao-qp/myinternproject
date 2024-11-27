@@ -1,0 +1,1 @@
+update requests set approval_status = null;

@@ -11,7 +11,7 @@ public class Users {
 	private Integer departmentsId;
 	private String departmentsName;
 	private Integer rolesId;
-	private String role;
+	private Integer role;
 	private Integer workPatternsId;
 
 }

@@ -65,3 +65,13 @@ CREATE TABLE departments (
 ) COMMENT = '部署マスター'
 ;
 
+CREATE TABLE work_patterns (
+    id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    name VARCHAR(10) NOT NULL COMMENT '勤務パターン名',
+    start_time TIME NOT NULL COMMENT '開始時刻',
+    end_time TIME NOT NULL COMMENT '終了時刻',
+    create_date_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登録日時',
+    update_date_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日時',
+    PRIMARY KEY(id)
+) COMMENT = '勤務パターンマスター'
+;

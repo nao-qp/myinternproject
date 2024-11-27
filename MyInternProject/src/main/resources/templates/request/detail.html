@@ -3,14 +3,13 @@
  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  layout:decorate="~{layout/layout}">
 <head>
-<meta charset="UTF-8">
 </head>
 <body>
 <div layout:fragment="content">
 	<h3>残 業 申 請 書</h3>
 	<p th:text="${request.departmentsName}"></p>
 	<p th:text="${user.name}"></p>
-	<p th:text="${request.work_patternsId}"></p>
+	<p th:text="${request.workPatternsId}"></p>
 	<p th:text="${request.startTime}"></p>
 	<p th:text="${request.endTime}"></p>
 	<p th:text="${request.restPeriod}"></p>

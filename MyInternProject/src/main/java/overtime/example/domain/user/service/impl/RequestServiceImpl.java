@@ -26,4 +26,40 @@ public class RequestServiceImpl implements RequestService {
 	public Requests getRequest(Integer id) {
 		return mapper.findOne(id);
 	}
+	
+	/** 残業申請データ1件更新 */
+	@Override
+	public int addRequest(Requests request) {
+		return mapper.insertOne(request);
+	}
+	
+	/** 次長//残業申請確認データ一覧取得 */
+	@Override
+	public List<Requests> getCheckDataList() {
+		return mapper.findManyCheckData();
+	}
+	
+	/** 次長//残業申請確認更新処理 */
+	@Override
+	public int updChecked(Integer id) {
+		return mapper.updateOne(id);
+	}
+	
+	/** 課長//残業申請承認データ一覧取得（次長確認済みデータ） */
+	@Override
+	public List<Requests> getApproveDataList() {
+		return mapper.findManyApproveData();
+	}
+	
+	/** 課長//残業申請承認更新処理 */
+	@Override
+	public int updateApproved(Integer id) {
+		return mapper.updateOneApprove(id);
+	}
+	
+	/** 課長//残業申請差し戻し更新処理 */
+	@Override
+	public int updateReturn(Integer id) {
+		return mapper.updateOneReturn(id);
+	}
 }

@@ -1,8 +1,11 @@
 package overtime.example.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,26 +13,35 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import overtime.example.domain.user.model.Requests;
 import overtime.example.domain.user.model.Users;
+import overtime.example.domain.user.model.WorkPatterns;
 import overtime.example.domain.user.service.RequestService;
 import overtime.example.domain.user.service.UserService;
+import overtime.example.domain.user.service.WorkPatternService;
 import overtime.example.domain.user.service.impl.CustomUserDetails;
+import overtime.example.form.RequestForm;
 
 @Controller
-public class RequestController {
+public class RequestAddController {
 
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
+	private WorkPatternService workPatternService;
+	
+	@Autowired
 	private RequestService requestService;
 	
-	//残業申請一覧画面表示
-	@GetMapping("request/list")
-	public String getRequestList(Model model, Locale locale) {
+	@GetMapping("request/add")
+	public String getRequestAdd(Model model, @ModelAttribute RequestForm form, Locale locale) {
 		
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,16 +63,19 @@ public class RequestController {
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
         
-        // 残業申請データ一覧を取得
-        List<Requests> requestList = requestService.getRequestList(currentUserId);
-        model.addAttribute("requestList", requestList);
+        //申請日に今日の日付を設定
+        form.setRequestDate(LocalDate.now());
         
-        return "request/list";
+        //勤務パターンマスター取得
+        List<WorkPatterns> workPatternList = workPatternService.getWorkPatternMaster();
+        model.addAttribute("workPatternList", workPatternList);
+              
+		return "request/add";
 	}
 	
-	//残業申請詳細画面表示
-	@GetMapping("request/detail/{id}")
-	public String getRequestDetail(Model model, Locale locale, @PathVariable("id") Integer id) {
+	
+	@PostMapping("request/add")
+	public String postRequestAdd(Model model, @ModelAttribute RequestForm form, Locale locale) {
 		
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -72,20 +87,18 @@ public class RequestController {
         
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
-        // 権限を取得
-        String role = authentication.getAuthorities().stream()
-        				.map(GrantedAuthority::getAuthority)
-        				.findFirst()
-        				.orElse(null);
-        model.addAttribute("role", role);
+        
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
-        model.addAttribute("user", user);
-        
-        // 残業申請データ取得
-        Requests request = requestService.getRequest(id);	//requestsテーブルのid
-        model.addAttribute("request", request);
-        
-		return "request/detail";
+		
+   
+		//申請書データ更新
+        Requests request = modelMapper.map(form, Requests.class);
+        request.setUsersId(user.getId());
+        request.setDepartmentsId(user.getDepartmentsId());
+        request.setRestPeriod(LocalTime.of(0, 0));	//TODO:規定休憩時間を設定する
+        requestService.addRequest(request);
+		
+		return "redirect:/request/list";
 	}
 }
