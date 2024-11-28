@@ -27,7 +27,7 @@ public class RequestServiceImpl implements RequestService {
 		return mapper.findOne(id);
 	}
 	
-	/** 残業申請データ1件更新 */
+	/** 残業申請データ1件作成 */
 	@Override
 	public int addRequest(Requests request) {
 		return mapper.insertOne(request);
@@ -61,5 +61,11 @@ public class RequestServiceImpl implements RequestService {
 	@Override
 	public int updateReturn(Integer id) {
 		return mapper.updateOneReturn(id);
+	}
+	
+	/** 社員//申請書修正更新処理 */
+	@Override
+	public int updateEdit(Requests request) {
+		return mapper.updateOneEdit(request);
 	}
 }

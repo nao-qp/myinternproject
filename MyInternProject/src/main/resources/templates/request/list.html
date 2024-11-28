@@ -22,7 +22,8 @@
       <th scope="col">残業予定時間（開始）</th>
       <th scope="col">残業予定時間（終了）</th>
       <th scope="col">残業理由</th>
-      <th scope="col">次長確認</th>
+      <th scope="col" class="text-center">次長確認</th>
+      <th scope="col" class="text-center">課長承認</th>
     </tr>
   </thead>
   <tbody>
@@ -35,7 +36,15 @@
       <td th:text="${request.startTime}"></td>
       <td th:text="${request.endTime}"></td>
       <td th:text="${request.reason}"></td>
-      <td th:text="${request.isChecked == 0 ? '' : '確認済'}"></td>
+      <td class="text-center">
+		  <div th:if="${request.isChecked == 1}">
+			  <p class="mb-0">確認済</p>
+		  </div>
+		  <div th:if="${request.isChecked == 2}">
+			  <a class="btn btn-primary" th:text="編集・再申請" th:href="@{/request/edit/{id}(id=${request.id})}"></a>
+		  </div>
+      </td>
+      <td th:text="${request.approvalStatus}" class="text-center"></td>
     </tr>
 
   </tbody>

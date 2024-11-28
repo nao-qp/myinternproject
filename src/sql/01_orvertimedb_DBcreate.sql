@@ -75,3 +75,26 @@ CREATE TABLE work_patterns (
     PRIMARY KEY(id)
 ) COMMENT = '勤務パターンマスター'
 ;
+
+CREATE TABLE reports(
+    id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    users_id INT NOT NULL COMMENT 'ユーザーID',
+    requests_id INT NOT NULL COMMENT '申請ID',
+    start_time DATETIME NOT NULL COMMENT '実残業時間（開始）',
+    end_time DATETIME NOT NULL COMMENT '実残業時間（終了）',
+    rest_period TIME NOT NULL COMMENT '休憩時間',
+    reason VARCHAR(500) COMMENT '残業報告',
+    is_checked INT NOT NULL DEFAULT 0 COMMENT '確認完了フラグ',
+    wday_dt_under60 INT NOT NULL DEFAULT 0 COMMENT '累計・平日日中60未満',
+    wday_dt_over60 INT NOT NULL DEFAULT 0 COMMENT '累計・平日日中60超',
+    wday_emn_under60 INT NOT NULL DEFAULT 0 COMMENT '累計・平日深夜早朝60未満',
+    wday_emn_over60 INT NOT NULL DEFAULT 0 COMMENT '累計・平日深夜早朝60超',
+    hday_dt_under60 INT NOT NULL DEFAULT 0 COMMENT '累計・休日日中60未満',
+    hday_dt_over60 INT NOT NULL DEFAULT 0 COMMENT '累計・休日日中60超',
+    hday_emn_under60 INT NOT NULL DEFAULT 0 COMMENT '累計・休日深夜早朝60未満',
+    hday_emn_over60 INT NOT NULL DEFAULT 0 COMMENT '累計・休日深夜早朝60超',
+    create_date_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登録日時',
+    update_date_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日時',
+    PRIMARY KEY(id)
+) COMMENT = '残業報告データ'
+;

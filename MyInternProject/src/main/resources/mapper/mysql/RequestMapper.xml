@@ -73,8 +73,9 @@
 		requests.id = #{id}
 </select>
 
-<!-- 残業申請データ一1件更新 -->
-<insert id="insertOne">
+<!-- 残業申請データ一1件作成 -->
+<!-- AUTO_INCREMENTで生成されたidをINSERT後にinsert対象データRequestsオブジェクトのidに設定する -->
+<insert id="insertOne" parameterType="Requests" useGeneratedKeys="true" keyProperty="id">
 	insert into requests (
 		users_id
 		,departments_id
@@ -132,8 +133,6 @@
 		users approval_users
 	on
 		requests.approval_users_id = users.id
-	where
-		requests.is_checked = 0		<!-- 未確認データ -->
 </select>
 
 <!-- 次長//残業申請確認更新処理 -->
@@ -196,13 +195,32 @@
 </update>
 
 <!-- 課長//残業申請差し戻し更新処理 -->
+<!-- 差戻、未修正の状態に更新 -->
 <update id="updateOneReturn">
 	update requests
 	set
 		approval_status = '差戻'
+		,is_checked = 2
 	where
 		id = #{id}
 </update>
+
+<!-- 社員//申請書修正更新処理 -->
+<!-- 修正内容と、決裁状態(→null)、確認完了フラグ(→0)を更新 -->
+<update id="updateOneEdit">
+	update requests
+	set
+		work_patterns_id = #{workPatternsId}
+		,start_time = #{startTime}
+		,end_time = #{endTime}
+		,rest_period = #{restPeriod}
+		,reason = #{reason}
+		,approval_status = null
+		,is_checked = 0
+	where
+		id = #{id}
+</update>
+
 </mapper>
 
 

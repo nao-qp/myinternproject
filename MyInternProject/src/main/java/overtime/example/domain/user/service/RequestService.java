@@ -29,4 +29,7 @@ public interface RequestService {
 	
 	/** 課長//残業申請差し戻し更新処理 */
 	public int updateReturn(Integer id);
+	
+	/** 社員//申請書修正更新処理 */
+	public int updateEdit(Requests request);
 }

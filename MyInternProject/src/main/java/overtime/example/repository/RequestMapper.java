@@ -15,7 +15,7 @@ public interface RequestMapper {
 	/** 残業申請データ1件取得 */
 	public Requests findOne(Integer id);
 	
-	/** 残業申請データ1件更新 */
+	/** 残業申請データ1件作成 */
 	public int insertOne(Requests request);
 	
 	/** 次長//残業申請確認データ一覧取得 */
@@ -32,4 +32,7 @@ public interface RequestMapper {
 	
 	/** 課長//残業申請差し戻し更新処理 */
 	public int updateOneReturn(Integer id);
+	
+	/** 社員//申請書修正更新処理 */
+	public int updateOneEdit(Requests request);
 }

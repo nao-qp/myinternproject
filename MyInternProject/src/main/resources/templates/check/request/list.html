@@ -25,6 +25,7 @@
 	      <th scope="col">残業予定時間（終了）</th>
 	      <th scope="col">残業理由</th>
 	      <th scope="col" class="text-center">次長確認</th>
+	      <th scope="col" class="text-center">課長承認</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -41,10 +42,19 @@
 	      <!-- 確認欄はリンクなし -->
 	      <td class="d-flex justify-content-center" th:onclick="event.stopPropagation();">
 	          <!-- チェックボックスを表示 -->
-	          <div>
-	          <input type="checkbox" name="checkedRequests" th:value="${request.id}" />
+	          <!-- 未確認データ -->
+	          <div th:if="${request.isChecked == 0}">
+	          	<input type="checkbox" name="checkedRequests" th:value="${request.id}"/>
+	          </div>
+	          <!-- 差戻で未修正 -->
+	          <div th:if="${request.isChecked == 2}">
+	          	<p class="mb-0">-</p>
+	          </div>
+	          <div th:if="${request.isChecked == 1}">
+	          	<p class="mb-0">確認済</p>
 	          </div>
 		  </td>
+		  <td class="text-center" th:text="${request.approvalStatus}"></td>
 	    </tr>
 	
 	  </tbody>

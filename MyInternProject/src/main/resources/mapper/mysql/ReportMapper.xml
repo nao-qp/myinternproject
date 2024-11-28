@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapperとxmlのマッピング -->
+<mapper namespace="overtime.example.repository.ReportMapper">
+
+<!-- 報告データ一1件作成 -->
+<!-- 申請データ作成時に空のデータを作成 -->
+<insert id="insertOne">
+	insert into reports (
+		users_id
+		,requests_id
+		,start_time
+		,end_time
+		,rest_period
+		,reason
+		)
+		values (
+			#{usersId}
+			,#{requestsId}
+			,#{startTime}
+			,#{endTime}
+			,#{restPeriod}
+			,#{reason}
+		)
+</insert>
+
+<!-- 社員/報告データ一一覧取得 -->
+<select id="findMany" resultType="Reports">
+	select
+		reports.id
+		,reports.users_id
+		,reports.requests_id
+		,reports.start_time
+		,reports.end_time
+		,reports.rest_period
+		,reports.reason
+		,reports.is_checked
+		,
+	from
+		reports
+	left join
+		requests
+	on
+		reports.requests_id = requests.id
+</select>
+
+
+</mapper>

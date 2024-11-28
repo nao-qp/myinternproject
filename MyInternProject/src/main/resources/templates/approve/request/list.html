@@ -47,7 +47,7 @@
 		  </td>
 		  <!-- 承認欄はリンクなし -->
 		  <td class="text-center" th:onclick="event.stopPropagation();">
-	      	<input type="checkbox" name="approvedRequests" th:value="${request.id}"
+	      	<input type="checkbox" name="approveRequests" th:value="${request.id}"
 	      		class="action-checkbox" th:attr="data-id=${request.id}" data-action="approve"/>
 	      </td>
 	    </tr>
