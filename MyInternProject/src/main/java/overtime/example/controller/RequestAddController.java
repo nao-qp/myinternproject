@@ -45,6 +45,7 @@ public class RequestAddController {
 	@Autowired
 	private ReportService reportService;
 	
+	//申請書新規作成画面表示
 	@GetMapping("request/add")
 	public String getRequestAdd(Model model, @ModelAttribute RequestForm form, Locale locale) {
 		
@@ -78,7 +79,7 @@ public class RequestAddController {
 		return "request/add";
 	}
 	
-	
+	//申請書新規作成更新処理
 	@PostMapping("request/add")
 	public String postRequestAdd(Model model, @ModelAttribute RequestForm form, Locale locale) {
 		

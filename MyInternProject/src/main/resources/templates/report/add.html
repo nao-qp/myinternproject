@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layout/layout}">
+<head>
+</head>
+<body>
+<div layout:fragment="content">
+	<div>
+		<h3>残業報告書</h3>
+	</div>
+	<!-- 申請情報 -->
+	<div class="mb-3 row">
+		<!-- 表示項目 -->
+		<label for="requestDate" class="col-sm-2 col-form-label mb-2">申請日</label>
+		<div class="col-sm-10">
+			<p th:text="${report.requestDate}"></p>
+	    </div>
+	    
+		<label for="departmentsName" class="col-sm-2 col-form-label mb-2">部署名</label>
+		<div class="col-sm-10">
+			<p th:text="${report.departmentsName}"></p>
+	    </div>
+	    
+		<label for="name" class="col-sm-2 col-form-label mb-2">氏名</label>
+			<p th:text="${user.name}"></p>
+		<div class="col-sm-10">
+	  
+	    </div>
+	    
+		<label for="workPatternsId" class="col-sm-2 col-form-label mb-2">勤務パターン</label>
+	    <div class="col-sm-3">
+			<p th:text="${report.workPatternsName} + '　' + ${report.workPatternsStartTime} + ' 〜 ' + ${report.workPatternsEndTime}"></p>
+   		
+   		</div>
+   		<!-- カラム位置調整 -->
+   		<div class="col-sm-7"></div>
+	    <label for="staticEmail" class="col-sm-2 col-form-label mb-2">残業予定時間</label>
+	    <label for="startTime" class="col-sm-1 col-form-label">開始：</label>
+	    	<p th:text="${report.requestsStartTime}"></p>
+
+	    <label for="endTime" class="col-sm-1 col-form-label">終了：</label>
+	    	<p th:text="${report.requestsEndTime}"></p>
+	    	
+	    <label for="restPeriod" class="col-sm-2 col-form-label mb-2">規定休憩時間</label>
+		<div class="col-sm-10">
+			<p th:text="${report.requestsRestPeriod}"></p>
+
+	    </div>
+	    
+	    <label for="reason" class="col-sm-2 col-form-label">残業理由</label>
+		<div class="col-sm-10 mb-5">
+		  <p th:text="${report.requestsReason}"></p>
+	    </div>
+	    
+	    <div>
+			<p>承認日</p>
+			<p th:text="${report.approvalDate}"></p>
+		</div>
+		<div>
+			<p>承認者</p>
+			<p th:text="${report.approvalUsersName}"></p>
+		</div>
+
+		<!-- 残業報告入力 -->
+		<form method="post" th:action="@{/report/add/{id}(id=${report.id})}" th:object="${reportForm}">
+			<div class="mb-3 row">
+				<label class="col-sm-2 col-form-label mb-2">実残業時間</label>
+			    <label for="startTime" class="col-sm-1 col-form-label mb-2">開始：</label>
+			    <input type="datetime-local" class="col-sm-3 mb-2" th:field="*{startTime}">
+			    <label for="endTime" class="col-sm-1 col-form-label ms-3 mb-2">終了：</label>
+			    <input type="datetime-local" class="col-sm-3 mb-2" th:field="*{endTime}">
+			    
+			    <label for="restPeriod" class="col-sm-2 col-form-label mb-2">うち休憩時間</label>
+			    <input type="time" class="col-sm-2 ms-2 mb-2" th:field="*{restPeriod}">
+			    <!-- カラム位置調整 -->
+   				<div class="col-sm-7"></div>
+   				
+			    <label for="reason" class="col-sm-2 col-form-label">残業報告</label>
+			    <div class="col-sm-10 mb-2">
+			      <textarea class="form-control" th:field="*{reason}" rows="5"></textarea>
+			    </div>
+
+		    </div>
+		    <!-- 更新ボタン -->
+			<div class="row d-flex justify-content-center mb-3">
+				<button type="submit" class="btn btn-primary col-sm-3">報告</button>
+			</div>
+	    </form>
+	</div>
+	
+</div>
+</body>
+</html>

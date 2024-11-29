@@ -30,15 +30,18 @@ public class Reports {
 	private Integer departmentsId;
 	private Integer workPatternsId;
 	private LocalDate requestDate;
-	private LocalDateTime requestStartTime;
-	private LocalDateTime requestEndTime;
-	private LocalTime requestRestPeriod;
-	private String requestReason;
+	private LocalDateTime requestsStartTime;
+	private LocalDateTime requestsEndTime;
+	private LocalTime requestsRestPeriod;
+	private String requestsReason;
 	private LocalDate approvalDate;
 	private Integer approvalUsersId;
 	private String usersName;
 	private String departmentsName;
 	private String approvalUsersName;
+	private String workPatternsName;
+	private String workPatternsStartTime;
+	private String workPatternsEndTime;
 }
 
 

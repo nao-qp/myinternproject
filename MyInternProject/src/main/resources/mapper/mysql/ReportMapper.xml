@@ -37,14 +37,66 @@
 		,reports.rest_period
 		,reports.reason
 		,reports.is_checked
-		,
+		,requests.request_date
 	from
 		reports
 	left join
 		requests
 	on
 		reports.requests_id = requests.id
+	where
+		reports.users_id = #{id}
 </select>
 
+<!-- 社員/報告データ1件取得 -->
+<select id="findOne" resultType="Reports">
+	select
+		reports.id
+		,reports.users_id
+		,reports.start_time
+		,reports.end_time
+		,reports.rest_period
+		,reports.reason
+		,reports.is_checked
+		,reports.update_date_time
+		,requests.departments_id
+		,requests.work_patterns_id
+		,requests.request_date
+		,requests.start_time as requests_start_time
+		,requests.end_time as requests_end_time
+		,requests.rest_period as requests_rest_period
+		,requests.reason as requests_reason
+		,requests.approval_date
+		,users.name
+		,approval_users.name as approval_users_name
+		,departments.name as departments_name
+		,work_patterns.name as work_patterns_name
+		,work_patterns.start_time as work_patterns_start_time
+		,work_patterns.end_time as work_patterns_end_time
+	from
+		reports
+	left join
+		requests
+	on
+		reports.requests_id = requests.id
+	left join
+		departments
+	on
+		requests.departments_id = departments.id
+	left join
+		users
+	on
+		reports.users_id = users.id
+	left join
+		users approval_users
+	on
+		requests.approval_users_id = users.id
+	left join
+		work_patterns
+	on
+		requests.work_patterns_id = work_patterns.id
+	where
+		reports.id = #{id}
+</select>
 
 </mapper>
