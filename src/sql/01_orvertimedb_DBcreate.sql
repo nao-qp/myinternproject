@@ -80,6 +80,8 @@ CREATE TABLE reports(
     id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
     users_id INT NOT NULL COMMENT 'ユーザーID',
     requests_id INT NOT NULL COMMENT '申請ID',
+    work_patterns_id INT NOT NULL COMMENT '勤務パターンID',
+    report_date DATE NOT NULL COMMENT '報告日',
     start_time DATETIME NOT NULL COMMENT '実残業時間（開始）',
     end_time DATETIME NOT NULL COMMENT '実残業時間（終了）',
     rest_period TIME NOT NULL COMMENT '休憩時間',

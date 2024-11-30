@@ -11,6 +11,7 @@ public class Reports {
 	private Integer id;
 	private Integer usersId;
 	private Integer requestsId;
+	private LocalDate reportDate;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
 	private LocalTime restPeriod;

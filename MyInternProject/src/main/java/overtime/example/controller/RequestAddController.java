@@ -75,7 +75,10 @@ public class RequestAddController {
         //勤務パターンマスター取得
         List<WorkPatterns> workPatternList = workPatternService.getWorkPatternMaster();
         model.addAttribute("workPatternList", workPatternList);
-              
+        
+        //休憩時間の初期値を00:00に設定
+        form.setRestPeriod(LocalTime.of(0, 0));
+        
 		return "request/add";
 	}
 	
@@ -111,6 +114,8 @@ public class RequestAddController {
         //申請データの情報を報告データに設定
         report.setUsersId(request.getUsersId());
         report.setRequestsId(requestId);
+        report.setWorkPatternsId(request.getWorkPatternsId());
+        report.setRequestDate(request.getRequestDate());
         report.setStartTime(request.getStartTime());
         report.setEndTime(request.getEndTime());
         report.setRestPeriod(request.getRestPeriod());

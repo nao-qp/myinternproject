@@ -15,7 +15,14 @@ public class WorkPatternServiceImpl implements WorkPatternService {
 	private WorkPatternMapper mapper;
 	
 	/** 勤務パターンマスター取得 */
+	@Override
 	public List<WorkPatterns> getWorkPatternMaster() {
 		return mapper.findMany();
 	};
+	
+	/** 勤務パターン1件取得 */
+	@Override
+	public WorkPatterns getWorkPattern(Integer id) {
+		return mapper.findOne(id);
+	}
 }

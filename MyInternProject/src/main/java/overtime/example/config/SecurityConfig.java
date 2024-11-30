@@ -44,7 +44,10 @@ public class SecurityConfig {
                 .passwordParameter("pass")
                 .defaultSuccessUrl("/request/list",true)
                 .permitAll()
-        );
+		    ).logout(logout -> logout
+		            .logoutUrl("/logout")
+		            .logoutSuccessUrl("/login?logout")
+		    		);
 
         // CSRF 対策を無効に設定 (一時的)
         http.csrf(csrf -> csrf

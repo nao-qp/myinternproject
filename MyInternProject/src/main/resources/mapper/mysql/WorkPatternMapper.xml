@@ -13,4 +13,14 @@
 		work_patterns
 </select>
 
+<!-- 勤務パターン1件取得 -->
+<select id="findOne" resultType="WorkPatterns">
+	select
+		*
+	form
+		work_patterns
+	where
+		id =#{id}
+</select>
+
 </mapper>

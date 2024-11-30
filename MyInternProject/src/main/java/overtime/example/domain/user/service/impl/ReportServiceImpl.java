@@ -32,4 +32,34 @@ public class ReportServiceImpl implements ReportService {
 	public Reports getReport(Integer id) {
 		return mapper.findOne(id);
 	}
+	
+	/** 社員/報告データ更新 */
+	@Override
+	public int editReport(Reports report) {
+		return mapper.updateOne(report);
+	}
+	
+	/** 社員/報告データ新規1件作成（事後報告） */
+	@Override
+	public int addNewReport(Reports report) {
+		return mapper.insertNewOne(report);
+	}
+	
+	/** 次長/報告データ一一覧取得 */
+	@Override
+	public List<Reports> getCheckDataList() {
+		return mapper.findManyCheckData();
+	}
+	
+	/** 次長//残業報告確認更新処理 */
+	@Override
+	public int updChecked(Integer id) {
+		return mapper.updateOneChecked(id);
+	}
+	
+	/** 月次資料CSV出力データ一覧取得（全件） */
+	@Override
+	public List<Reports> getMonthlyreportListAll() {
+		return mapper.findManyMonthlyAll();
+	}
 }

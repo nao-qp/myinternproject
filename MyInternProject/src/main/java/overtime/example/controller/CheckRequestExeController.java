@@ -19,7 +19,7 @@ public class CheckRequestExeController {
 	
 	//次長/残業申請確認更新処理
 	@PostMapping("check/request/execute")
-	public String postCheckRequesExecute(Model model, Locale locale, 
+	public String postCheckRequestExecute(Model model, Locale locale, 
 			@RequestParam(value = "checkedRequests", required = false) List<Integer> checkedRequests) {
 		
 		if (checkedRequests == null || checkedRequests.isEmpty()) {

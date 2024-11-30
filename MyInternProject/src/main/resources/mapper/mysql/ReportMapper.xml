@@ -10,6 +10,8 @@
 <insert id="insertOne">
 	insert into reports (
 		users_id
+		,work_patterns_id
+		,report_date
 		,requests_id
 		,start_time
 		,end_time
@@ -18,6 +20,8 @@
 		)
 		values (
 			#{usersId}
+			,#{workPatternsId}
+			,#{requestDate}
 			,#{requestsId}
 			,#{startTime}
 			,#{endTime}
@@ -32,6 +36,7 @@
 		reports.id
 		,reports.users_id
 		,reports.requests_id
+		,reports.report_date
 		,reports.start_time
 		,reports.end_time
 		,reports.rest_period
@@ -53,6 +58,8 @@
 	select
 		reports.id
 		,reports.users_id
+		,reports.work_patterns_id
+		,reports.report_date
 		,reports.start_time
 		,reports.end_time
 		,reports.rest_period
@@ -98,5 +105,134 @@
 	where
 		reports.id = #{id}
 </select>
+
+<!-- 社員/報告データ更新 -->
+<update id="updateOne">
+	update
+		reports
+	set
+		report_date = #{reportDate}
+		,start_time = #{startTime}
+		,end_time = #{endTime}
+		,rest_period = #{restPeriod}
+		,reason = #{reason}
+		,is_checked = 2
+	where
+		id = #{id}
+</update>
+
+<!-- 社員/報告データ新規1件作成（事後報告） -->
+<!-- 申請書無しなのでrequests_id=0,is_checked=2とする-->
+<insert id="insertNewOne">
+	insert into reports (
+		users_id
+		,work_patterns_id
+		,report_date
+		,requests_id
+		,start_time
+		,end_time
+		,rest_period
+		,reason
+		,is_checked
+		)
+		values (
+			#{usersId}
+			,#{workPatternsId}
+			,#{reportDate}
+			,0
+			,#{startTime}
+			,#{endTime}
+			,#{restPeriod}
+			,#{reason}
+			,2
+		)
+</insert>
+
+<!-- 次長/報告データ一一覧取得 -->
+<!-- is_checked!=0報告済み、報告確認済みデータを取得 -->
+<select id="findManyCheckData" resultType="Reports">
+	select
+		reports.id
+		,reports.users_id
+		,reports.requests_id
+		,reports.report_date
+		,reports.start_time
+		,reports.end_time
+		,reports.rest_period
+		,reports.reason
+		,reports.is_checked
+		,users.name as users_name
+	from
+		reports
+	left join
+		users
+	on
+		reports.users_id = users.id
+	where
+		reports.is_checked != 0
+</select>
+
+<!-- 次長//残業報告確認更新処理 -->
+<update id="updateOneChecked">
+	update reports
+	set
+		is_checked = 1
+	where
+		id = #{id}
+</update>
+
+<!-- 月次資料CSV出力データ一覧取得（全件） -->
+<select id="findManyMonthlyAll">
+	select
+		reports.id
+		,reports.users_id
+		,reports.work_patterns_id
+		,reports.report_date
+		,reports.start_time
+		,reports.end_time
+		,reports.rest_period
+		,reports.reason
+		,reports.is_checked
+		,reports.update_date_time
+		,requests.departments_id
+		,requests.work_patterns_id
+		,requests.request_date
+		,requests.start_time as requests_start_time
+		,requests.end_time as requests_end_time
+		,requests.rest_period as requests_rest_period
+		,requests.reason as requests_reason
+		,requests.approval_date
+		,users.name
+		,approval_users.name as approval_users_name
+		,departments.name as departments_name
+		,work_patterns.name as work_patterns_name
+		,work_patterns.start_time as work_patterns_start_time
+		,work_patterns.end_time as work_patterns_end_time
+	from
+		reports
+	left join
+		requests
+	on
+		reports.requests_id = requests.id
+	left join
+		departments
+	on
+		requests.departments_id = departments.id
+	left join
+		users
+	on
+		reports.users_id = users.id
+	left join
+		users approval_users
+	on
+		requests.approval_users_id = users.id
+	left join
+		work_patterns
+	on
+		requests.work_patterns_id = work_patterns.id
+	where
+		reports.is_checked = 1
+</select>
+
 
 </mapper>

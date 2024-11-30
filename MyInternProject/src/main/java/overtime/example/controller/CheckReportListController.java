@@ -1,5 +1,6 @@
 package overtime.example.controller;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import overtime.example.domain.user.model.Reports;
 import overtime.example.domain.user.model.Users;
@@ -17,7 +17,7 @@ import overtime.example.domain.user.service.UserService;
 import overtime.example.domain.user.service.impl.CustomUserDetails;
 
 @Controller
-public class ReportDetaileController {
+public class CheckReportListController {
 
 	@Autowired
 	private UserService userService;
@@ -25,9 +25,9 @@ public class ReportDetaileController {
 	@Autowired
 	private ReportService reportService;
 	
-	//残業報告詳細画面表示
-	@GetMapping("report/detail/{id}")
-	public String getReportDetail(Model model, Locale locale, @PathVariable("id") Integer id) {
+	//残業報告確認一覧画面表示
+	@GetMapping("check/report/list")
+	public String getCheckReportList(Model model, Locale locale) {
 		
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -39,16 +39,21 @@ public class ReportDetaileController {
         
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
-        
+
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
+       
+        //次長権限ではない場合、ログインページにリダイレクトする
+        if (!user.getRole().equals(1)) {
+        	return "redirect:/user/login";
+        }
+		
+        // 残業報告データ一覧を取得
+        List<Reports> reportList = reportService.getCheckDataList();
+        model.addAttribute("reportList", reportList);
         
-        // 残業報告データ取得
-        Reports report = reportService.getReport(id);	//reportテーブルのid
-        model.addAttribute("report", report);
-        
-		return "report/detail";
+		
+		return "check/report/list";
 	}
-	
 }

@@ -12,14 +12,15 @@
 		  <h3>残 業 報 告 一 覧</h3>
 	  </div>
 	  <div>
-		 <a class="btn btn-primary" th:text="新規作成" href="/report/add"></a>
+		 <a class="btn btn-primary" th:text="新規作成" th:href="@{/report/new-add}"></a>
 	  </div>
 	  <!-- 報告一覧 -->
 	  <table class="table">
 	  <thead>
 	    <tr>
 		  <th scope="col">報告</th>
-	      <th scope="col">日付</th>
+	      <th scope="col">申請日付</th>
+	      <th scope="col">報告日付</th>
 	      <th scope="col">実残業時間（開始）</th>
 	      <th scope="col">実残業時間（終了）</th>
 	      <th scope="col">残業報告</th>
@@ -34,14 +35,17 @@
 	        th:attr="data-href=@{/report/detail/{id}(id=${report.id})}"
 	        style="cursor: pointer;">
 	      <td>
-			<div th:if="${report.isChecked == 0}">
+			<div th:if="${report.isChecked != 2}">
 		 		<a class="btn btn-primary" th:text="報告" th:href="@{/report/add/{id}(id=${report.id})}"></a>
 	  		</div>
-	  		<div th:if="${report.isChecked == 1}">
+	  		<div th:if="${report.isChecked == 2}">
 				<p>報告済</p>
 			</div>
 		  </td>
 	      <th scope="row" th:text="${report.requestDate}"></th>
+	      <th scope="row">
+			<p th:if="${report.isChecked == 2 || report.isChecked == 1}" th:text="${report.reportDate}"></p>
+		  </th>
 	      <td th:text="${report.StartTime}"></td>
 	      <td th:text="${report.EndTime}"></td>
 	      <td th:text="${report.Reason}"></td>
