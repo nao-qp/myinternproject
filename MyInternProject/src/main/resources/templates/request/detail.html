@@ -9,7 +9,8 @@
 	<h3>残 業 申 請 書</h3>
 	<p th:text="${request.departmentsName}"></p>
 	<p th:text="${user.name}"></p>
-	<p th:text="${request.workPatternsId}"></p>
+	<p th:text="${request.workPatternsName + '　' + request.workPatternsStartTime + ' 〜 ' + request.workPatternsEndTime}"></p>
+	
 	<p th:text="${request.startTime}"></p>
 	<p th:text="${request.endTime}"></p>
 	<p th:text="${request.restPeriod}"></p>

@@ -5,7 +5,7 @@
 <!-- Mapperとxmlのマッピング -->
 <mapper namespace="overtime.example.repository.RequestMapper">
 
-<!-- 残業申請データ一覧取得 -->
+<!-- 社員//残業申請データ一覧取得 -->
 <select id="findMany" resultType="Requests">
 	select
 		requests.id
@@ -13,6 +13,7 @@
 		,requests.departments_id
 		,requests.work_patterns_id
 		,requests.request_date
+		,requests.overtime_date
 		,requests.start_time
 		,requests.end_time
 		,requests.rest_period
@@ -25,6 +26,8 @@
 		,requests.update_date_time
 		,departments.name as departments_name
 		,users.name as users_name
+		,work_patterns.start_time as work_patterns_start_time
+		,work_patterns.end_time as work_patterns_end_time
 	from
 		requests
 	left join
@@ -35,11 +38,15 @@
 		users
 	on
 		requests.approval_users_id = users.id
+	left join
+		work_patterns
+	on
+		requests.work_patterns_id = work_patterns.id
 	where
 		requests.users_id = #{id}
 </select>
 
-<!-- 残業申請データ1件取得 -->
+<!-- 社員//残業申請データ1件取得 -->
 <select id="findOne" resultType="Requests">
 	select
 		requests.id
@@ -47,6 +54,7 @@
 		,requests.departments_id
 		,requests.work_patterns_id
 		,requests.request_date
+		,requests.overtime_date
 		,requests.start_time
 		,requests.end_time
 		,requests.rest_period
@@ -59,6 +67,9 @@
 		,requests.update_date_time
 		,departments.name as departments_name
 		,users.name as approval_users_name
+		,work_patterns.name as work_patterns_name
+		,work_patterns.start_time as work_patterns_start_time
+		,work_patterns.end_time as work_patterns_end_time
 	from
 		requests
 	left join
@@ -69,11 +80,15 @@
 		users
 	on
 		requests.approval_users_id = users.id
+	left join
+		work_patterns
+	on
+		requests.work_patterns_id = work_patterns.id
 	where
 		requests.id = #{id}
 </select>
 
-<!-- 残業申請データ一1件作成 -->
+<!-- 社員//残業申請データ一1件作成 -->
 <!-- AUTO_INCREMENTで生成されたidをINSERT後にinsert対象データRequestsオブジェクトのidに設定する -->
 <insert id="insertOne" parameterType="Requests" useGeneratedKeys="true" keyProperty="id">
 	insert into requests (
@@ -81,6 +96,7 @@
 		,departments_id
 		,work_patterns_id
 		,request_date
+		,overtime_date
 		,start_time
 		,end_time
 		,rest_period
@@ -91,6 +107,7 @@
 			,#{departmentsId}
 			,#{workPatternsId}
 			,#{requestDate}
+			,#{overtimeDate}
 			,#{startTime}
 			,#{endTime}
 			,#{restPeriod}
@@ -106,6 +123,7 @@
 		,requests.departments_id
 		,requests.work_patterns_id
 		,requests.request_date
+		,requests.overtime_date
 		,requests.start_time
 		,requests.end_time
 		,requests.rest_period
@@ -119,6 +137,8 @@
 		,users.name as users_name
 		,departments.name as departments_name
 		,approval_users.name as approval_users_name 
+		,work_patterns.start_time as work_patterns_start_time
+		,work_patterns.end_time as work_patterns_end_time
 	from
 		requests
 	left join
@@ -133,6 +153,10 @@
 		users approval_users
 	on
 		requests.approval_users_id = users.id
+	left join
+		work_patterns
+	on
+		requests.work_patterns_id = work_patterns.id
 </select>
 
 <!-- 次長//残業申請確認更新処理 -->
@@ -153,6 +177,7 @@
 		,requests.departments_id
 		,requests.work_patterns_id
 		,requests.request_date
+		,requests.overtime_date
 		,requests.start_time
 		,requests.end_time
 		,requests.rest_period
@@ -165,7 +190,9 @@
 		,requests.update_date_time
 		,users.name as users_name
 		,departments.name as departments_name
-		,approval_users.name as approval_users_name 
+		,approval_users.name as approval_users_name
+		,work_patterns.start_time as work_patterns_start_time
+		,work_patterns.end_time as work_patterns_end_time
 	from
 		requests
 	left join
@@ -180,6 +207,10 @@
 		users approval_users
 	on
 		requests.approval_users_id = users.id
+	left join
+		work_patterns
+	on
+		requests.work_patterns_id = work_patterns.id
 	where
 		requests.is_checked = 1	
 	and requests.approval_status is null

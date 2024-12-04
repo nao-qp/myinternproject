@@ -10,13 +10,18 @@ import lombok.Data;
 public class Reports {
 	private Integer id;
 	private Integer usersId;
+	private Integer account;
 	private Integer requestsId;
 	private LocalDate reportDate;
-	private LocalDateTime startTime;
-	private LocalDateTime endTime;
-	private LocalTime restPeriod;
+	private LocalDate overtimeDate;
+	private LocalTime startTime;
+	private LocalTime endTime;
+	private LocalTime restStartTime;
+	private LocalTime restEndTime;
+	private Integer restPeriod;
 	private String reason;
 	private Integer isChecked;
+	private Integer actualOvertime;
 	private Integer wdayDtUnder60;
 	private Integer wdayDtOver60;
 	private Integer wdayEmnUnder60;
@@ -31,8 +36,8 @@ public class Reports {
 	private Integer departmentsId;
 	private Integer workPatternsId;
 	private LocalDate requestDate;
-	private LocalDateTime requestsStartTime;
-	private LocalDateTime requestsEndTime;
+	private LocalTime requestsStartTime;
+	private LocalTime requestsEndTime;
 	private LocalTime requestsRestPeriod;
 	private String requestsReason;
 	private LocalDate approvalDate;
@@ -41,8 +46,8 @@ public class Reports {
 	private String departmentsName;
 	private String approvalUsersName;
 	private String workPatternsName;
-	private String workPatternsStartTime;
-	private String workPatternsEndTime;
+	private LocalTime workPatternsStartTime;
+	private LocalTime workPatternsEndTime;
 }
 
 

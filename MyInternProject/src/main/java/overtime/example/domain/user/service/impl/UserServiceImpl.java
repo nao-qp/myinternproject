@@ -12,13 +12,13 @@ import overtime.example.repository.UserMapper;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper mapper;
-	
+
 	/** ログインユーザー情報取得 */
 	@Override
 	public LoginUsers getLoginUser(String accout) {
 		return mapper.findLoginUser(accout);
 	}
-	
+
 	/** ユーザー情報取得 */
 	@Override
 	public Users getUser(Integer id) {

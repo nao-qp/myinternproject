@@ -1,7 +1,6 @@
 package overtime.example.form;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,10 +11,12 @@ import lombok.Data;
 public class RequestForm {
 	private Integer workPatternsId;
 	private LocalDate requestDate;
-	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-	private LocalDateTime startTime;
-	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-	private LocalDateTime endTime;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate overtimeDate;
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalTime startTime;
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalTime endTime;
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime restPeriod;
 	private String reason;

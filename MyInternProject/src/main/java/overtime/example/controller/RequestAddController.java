@@ -32,23 +32,23 @@ public class RequestAddController {
 
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private WorkPatternService workPatternService;
-	
+
 	@Autowired
 	private RequestService requestService;
-	
+
 	@Autowired
 	private ReportService reportService;
-	
+
 	//申請書新規作成画面表示
 	@GetMapping("request/add")
 	public String getRequestAdd(Model model, @ModelAttribute RequestForm form, Locale locale) {
-		
+
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -56,7 +56,7 @@ public class RequestAddController {
         if (authentication == null) {
         	 return "redirect:/user/login";
         }
-        
+
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
         // 権限を取得
@@ -68,24 +68,27 @@ public class RequestAddController {
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
-        
+
         //申請日に今日の日付を設定
         form.setRequestDate(LocalDate.now());
-        
+
         //勤務パターンマスター取得
         List<WorkPatterns> workPatternList = workPatternService.getWorkPatternMaster();
         model.addAttribute("workPatternList", workPatternList);
-        
+
+        //残業実施日の初期値を設定
+        form.setOvertimeDate(LocalDate.now());
+
         //休憩時間の初期値を00:00に設定
         form.setRestPeriod(LocalTime.of(0, 0));
-        
+
 		return "request/add";
 	}
-	
+
 	//申請書新規作成更新処理
 	@PostMapping("request/add")
 	public String postRequestAdd(Model model, @ModelAttribute RequestForm form, Locale locale) {
-		
+
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -93,21 +96,31 @@ public class RequestAddController {
         if (authentication == null) {
         	 return "redirect:/user/login";
         }
-        
+
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
-        
+
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
-		
-   
+
 		//申請データ作成更新
         Requests request = modelMapper.map(form, Requests.class);
+        //勤務パターン開始時間終了時間取得
+        WorkPatterns workPattern = workPatternService.getWorkPattern(request.getWorkPatternsId());
+
         request.setUsersId(user.getId());
         request.setDepartmentsId(user.getDepartmentsId());
+        //前残業開始時間、後残業終了時間が未設定の場合、通常勤務時間を設定する。
+        if (request.getStartTime() == null) {
+        	request.setStartTime(workPattern.getStartTime());
+        }
+        if (request.getEndTime() == null) {
+        	request.setEndTime(workPattern.getEndTime());
+        }
+
         request.setRestPeriod(LocalTime.of(0, 0));	//TODO:規定休憩時間を設定する
         requestService.addRequest(request);
-		
+
         //申請データに紐づく報告データを作成更新
         Integer requestId = request.getId();	//申請データ作成時に付番されたidを取得、設定
         Reports report = new Reports();
@@ -116,11 +129,12 @@ public class RequestAddController {
         report.setRequestsId(requestId);
         report.setWorkPatternsId(request.getWorkPatternsId());
         report.setRequestDate(request.getRequestDate());
+        report.setOvertimeDate(request.getOvertimeDate());
         report.setStartTime(request.getStartTime());
         report.setEndTime(request.getEndTime());
-        report.setRestPeriod(request.getRestPeriod());
-        reportService.addReport(report);
         
+        reportService.addReport(report);
+
 		return "redirect:/request/list";
 	}
 }

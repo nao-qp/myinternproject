@@ -3,8 +3,6 @@
  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  layout:decorate="~{layout/layout}">
 <head>
-<!-- JS読込 -->
-<script th:src="@{/js/list.js}" defer></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -43,7 +41,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="reportsSum : ${reportsSumList}"
-						th:attr="data-href=@{/monthlyreport/detail/{id}(id=${reportsSum.usersId})}"
+						th:attr="data-href=@{/monthly/detail/{id}(id=${reportsSum.usersId})}"
 						style="cursor: pointer;">
 					<td th:text="${reportsSum.usersName}"></td>
 					<td class="text-end" th:text="${reportsSum.allSum}"></td>
@@ -59,7 +57,6 @@
 			</tbody>
 		</table>
 	</div>
-	
 </div>
 </body>
 </html>

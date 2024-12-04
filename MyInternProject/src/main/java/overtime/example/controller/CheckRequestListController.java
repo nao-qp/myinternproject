@@ -21,14 +21,14 @@ public class CheckRequestListController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private RequestService requestService;
-	
+
 	//残業申請確認一覧画面表示
 	@GetMapping("check/request/list")
 	public String getCheckRequestList(Model model, Locale locale) {
-		
+
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -36,26 +36,26 @@ public class CheckRequestListController {
         if (authentication == null) {
         	 return "redirect:/user/login";
         }
-        
+
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
 
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
-       
+
         //次長権限ではない場合、ログインページにリダイレクトする
         if (!user.getRole().equals(1)) {
         	return "redirect:/user/login";
         }
-        
+
         // 残業申請データ一覧を取得
         List<Requests> requestList = requestService.getCheckDataList();
         model.addAttribute("requestList", requestList);
-        
-        
+
+
         return "check/request/list";
-        
+
 	}
 
 }

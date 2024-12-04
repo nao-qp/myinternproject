@@ -1,1 +1,6 @@
 @charset "UTF-8";
+
+/** 幅調整 */
+.width-150 {
+	width:150px;
+}

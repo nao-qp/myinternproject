@@ -21,14 +21,14 @@ public class CheckReportListController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private ReportService reportService;
-	
+
 	//残業報告確認一覧画面表示
 	@GetMapping("check/report/list")
 	public String getCheckReportList(Model model, Locale locale) {
-		
+
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -36,24 +36,24 @@ public class CheckReportListController {
         if (authentication == null) {
         	 return "redirect:/user/login";
         }
-        
+
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
 
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
-       
+
         //次長権限ではない場合、ログインページにリダイレクトする
         if (!user.getRole().equals(1)) {
         	return "redirect:/user/login";
         }
-		
+
         // 残業報告データ一覧を取得
         List<Reports> reportList = reportService.getCheckDataList();
         model.addAttribute("reportList", reportList);
-        
-		
+
+
 		return "check/report/list";
 	}
 }

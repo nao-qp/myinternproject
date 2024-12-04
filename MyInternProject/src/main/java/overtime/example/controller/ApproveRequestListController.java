@@ -21,14 +21,14 @@ public class ApproveRequestListController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private RequestService requestService;
-	
+
 	//残業申請承認一覧画面表示
 	@GetMapping("approve/request/list")
 	public String getApproveRequestList(Model model, Locale locale) {
-		
+
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -36,23 +36,23 @@ public class ApproveRequestListController {
         if (authentication == null) {
         	 return "redirect:/user/login";
         }
-        
+
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
-        
+
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
-       
+
         //課長権限ではない場合、ログインページにリダイレクトする
         if (!user.getRole().equals(2)) {
         	return "redirect:/user/login";
         }
-		
+
         // 残業申請データ一覧を取得
         List<Requests> requestList = requestService.getApproveDataList();
         model.addAttribute("requestList", requestList);
-        
+
 		return "approve/request/list";
 	}
 }

@@ -11,8 +11,8 @@ public interface WorkPatternMapper {
 
 	/** 勤務パターンマスター取得 */
 	public List<WorkPatterns> findMany();
-	
+
 	/** 勤務パターン1件取得 */
 	public WorkPatterns findOne(Integer id);
-	
+
 }

@@ -4,9 +4,10 @@
  layout:decorate="~{layout/layout}">
 <head>
 <!-- JS読込 -->
-<script th:src="@{/js/add-request.js}" defer></script>
+<script th:src="@{/js/set-workpattern.js}" defer></script>
 <script th:inline="javascript">
-	 const userWorkPatternsId = /*[[${user.workPatternsId}]]*/ '1';
+	 const initialDisplayWorkPatternsId = /*[[${user.workPatternsId}]]*/ '1';
+     const workPatterns = /*[[${workPatternList}]]*/ [];  // 勤務パターンをJavaScriptに渡す
 </script>
 </head>
 <body>
@@ -19,6 +20,12 @@
 		<form method="post" th:action="@{/report/new-add}" th:object="${reportForm}">
 			<div class="mb-3 row">
 				<!-- 表示項目 -->
+				<label class="col-sm-2 col-form-label mb-2">報告日</label>
+				<div class="col-sm-10 d-flex align-items-center">
+				  <!-- 今日の日付が設定される -->
+				  <p class="mb-1" th:text="${reportDate}"></p>
+			    </div>
+			    
 				<label for="departmentsName" class="col-sm-2 col-form-label mb-2">部署名</label>
 				<div class="col-sm-10">
 			       <input type="text" readonly class="form-control-plaintext" id="departmentsName" th:value="${user.departmentsName}">
@@ -42,14 +49,35 @@
 	       		<!-- カラム位置調整 -->
    				<div class="col-sm-7"></div>
 				
-				<label class="col-sm-2 col-form-label mb-2">実残業時間</label>
-			    <label for="startTime" class="col-sm-1 col-form-label mb-2">開始：</label>
-			    <input type="datetime-local" class="col-sm-3 mb-2" th:field="*{startTime}">
-			    <label for="endTime" class="col-sm-1 col-form-label ms-3 mb-2">終了：</label>
-			    <input type="datetime-local" class="col-sm-3 mb-2" th:field="*{endTime}">
-			    
-			    <label for="restPeriod" class="col-sm-2 col-form-label mb-2">うち休憩時間</label>
-			    <input type="time" class="col-sm-2 ms-2 mb-2" th:field="*{restPeriod}">
+				<label for="overtimeDate" class="col-sm-2 col-form-label mb-2">残業実施日</label>
+					<input type="date" class="col-sm-3 mb-2" th:field="*{overtimeDate}">
+			    <!-- カラム位置調整 -->
+	       		<div class="col-sm-7"></div>
+				
+				<label for="staticEmail" class="col-sm-2 col-form-label mb-2">実残業時間</label>
+				<label for="startTime" class="col-auto col-form-label">前残業開始時間：</label>
+			    	<input type="time" class="col-sm-2 mb-2" th:field="*{startTime}">
+			    	<p id="startTimeDisplay" class="col-sm-1 mb-0 pb-1 d-flex align-items-center justify-content-center"></p>
+			    <!-- カラム位置調整 -->
+	       		<div class="col-sm-12"></div>
+	       		<div class="col-sm-2"></div>
+	       		
+			     <label for="endTime" class="col-auto col-form-label mb-2">後残業終了時間：</label>
+			     	<p id="endTimeDisplay" class="col-sm-1 mb-0 pb-1 d-flex align-items-center justify-content-center"></p>
+			    	<input type="time" class="col-sm-2 mb-2" th:field="*{endTime}">
+			 	<!-- カラム位置調整 -->
+	       		<div class="col-sm-5"></div>
+	       		
+	       		<!-- うち休憩時間 -->
+	       		<label for="staticEmail" class="col-sm-2 col-form-label mb-2">うち休憩時間</label>
+				<label for="restStartTime" class="col-auto col-form-label">開始時間：</label>
+			    	<input type="time" class="col-sm-2 mb-2" th:field="*{restStartTime}">
+			    <!-- カラム位置調整 -->
+	       		<div class="col-sm-12"></div>
+	       		<div class="col-sm-2"></div>
+	       		
+			     <label for="restEndTime" class="col-auto col-form-label mb-2">終了時間：</label>
+			    	<input type="time" class="col-sm-2 mb-2" th:field="*{restEndTime}">
 			    <!-- カラム位置調整 -->
    				<div class="col-sm-7"></div>
    				

@@ -7,7 +7,7 @@ public interface UserService {
 
 	/** ログインユーザー情報取得 */
 	public LoginUsers getLoginUser(String account);
-	
+
 	/** ユーザー情報取得 */
 	public Users getUser(Integer id);
 }

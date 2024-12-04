@@ -17,5 +17,5 @@ public class LoginController {
 	  model.addAttribute("page", "login");
   return "user/login";
   }
- 
+
 }

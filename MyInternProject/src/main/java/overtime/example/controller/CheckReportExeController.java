@@ -16,12 +16,12 @@ public class CheckReportExeController {
 
 	@Autowired
 	private ReportService reportService;
-	
+
 	//次長/残業報告確認更新処理
 	@PostMapping("check/report/execute")
-	public String postCheckReportExecute(Model model, Locale locale, 
+	public String postCheckReportExecute(Model model, Locale locale,
 			@RequestParam(value = "checkedreports", required = false) List<Integer> checkedreports) {
-		
+
 		if (checkedreports == null || checkedreports.isEmpty()) {
 			//何も選択されていない場合、一覧へリダイレクト
 			return "redirect:/check/report/list";
@@ -34,5 +34,5 @@ public class CheckReportExeController {
 		}
 		return "redirect:/check/report/list";
 	}
-	
+
 }

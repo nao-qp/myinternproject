@@ -17,7 +17,7 @@
 <select id="findOne" resultType="WorkPatterns">
 	select
 		*
-	form
+	from
 		work_patterns
 	where
 		id =#{id}

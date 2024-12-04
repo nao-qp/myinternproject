@@ -10,7 +10,7 @@ public interface UserMapper {
 
 	/** ログインユーザー情報取得 */
 	public LoginUsers findLoginUser(String account);
-	
+
 	/** ユーザー情報取得 */
 	public Users findUser(Integer id);
 }

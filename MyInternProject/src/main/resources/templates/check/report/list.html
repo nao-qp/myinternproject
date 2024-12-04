@@ -19,13 +19,13 @@
 	<table class="table">
 	  <thead>
 	    <tr>
-	      <th scope="col">報告日</th>
-	      <th scope="col">報告者</th>
-	      <th scope="col">実残業時間（開始）</th>
-	      <th scope="col">実残業時間（終了）</th>
-	      <th scope="col">うち休憩時間</th>
-	      <th scope="col">残業報告</th>
-	      <th scope="col" class="text-center">次長確認</th>
+	      <th scope="col" class="px-0">残業実施日</th>
+	      <th scope="col" class="width-150">報告者</th>
+	      <th scope="col" class="px-0">実残業時間（開始）</th>
+	      <th scope="col" class="px-0">勤務時間</th>
+	      <th scope="col" class="px-0">実残業時間（終了）</th>
+	      <th scope="col" class="w-25">残業報告</th>
+	      <th scope="col" class="text-center px-0">次長確認</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -34,11 +34,11 @@
 	    <tr th:each="report : ${reportList}" 
 	        th:attr="data-href=@{/report/detail/{id}(id=${report.id})}"
 	        style="cursor: pointer;">
-	      <th scope="row" th:text="${report.reportDate}"></th>
+	      <th scope="row" class="px-0" th:text="${report.overtimeDate}"></th>
 	      <td th:text="${report.usersName}"></td>
-	      <td th:text="${report.startTime}"></td>
-	      <td th:text="${report.endTime}"></td>
-	      <td th:text="${report.restPeriod}"></td>
+	      <td class="px-0" th:text="${report.startTime}"></td>
+	      <td class="px-0" th:text="${report.workPatternsStartTime + '〜' + report.workPatternsEndTime}"></td>
+	      <td class="px-0" th:text="${report.endTime}"></td>
 	      <td th:text="${report.reason}"></td>
 	      <!-- 確認欄はリンクなし -->
 	      <td class="d-flex justify-content-center" th:onclick="event.stopPropagation();">

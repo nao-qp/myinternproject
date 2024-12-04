@@ -1,6 +1,5 @@
 package overtime.example.controller;
 
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,26 +8,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import overtime.example.domain.user.model.ReportsSum;
 import overtime.example.domain.user.model.Users;
-import overtime.example.domain.user.service.ReportService;
 import overtime.example.domain.user.service.UserService;
 import overtime.example.domain.user.service.impl.CustomUserDetails;
 
 @Controller
-public class MonthlyreportListController {
+public class MonthlyreportDetailController {
 
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private ReportService reportService;
 
-	//月次資料画面表示
-	@GetMapping("monthlyreport/list")
-	public String getMonthlyreportList(Model model, Locale locale) {
 
+	//月次資料詳細画面表示
+	@GetMapping("monthlyreport/detail/{id}")
+	public String getMonthlyreportList(Model model, Locale locale, @PathVariable("id") Integer id) {
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -44,11 +40,9 @@ public class MonthlyreportListController {
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
 
-        //残業時間データ取得
-        List<ReportsSum> reportsSumList = reportService.getMonthlySum();
-        model.addAttribute("reportsSumList", reportsSumList);
+        //月次資料詳細データ取得
 
-		return "monthlyreport/list";
+
+        return "monthlyreport/detail";
 	}
-
 }

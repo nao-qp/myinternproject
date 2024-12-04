@@ -16,13 +16,13 @@ public class ApproveRequestExeController {
 
 	@Autowired
 	private RequestService requestService;
-	
+
 	//課長/残業申請承認更新処理
 	@PostMapping("approve/request/execute")
-	public String postApproveRequestExecute(Model model, Locale locale, 
+	public String postApproveRequestExecute(Model model, Locale locale,
 			@RequestParam(value = "returnRequests", required = false) List<Integer> returnRequests,
 			@RequestParam(value = "approveRequests", required = false) List<Integer> approveRequests) {
-		
+
 		//チェック存在確認
 		boolean existReturnChecked = true;
 		if (returnRequests == null || returnRequests.isEmpty()) {
@@ -32,7 +32,7 @@ public class ApproveRequestExeController {
 		if (approveRequests == null || approveRequests.isEmpty()) {
 			existApproveChecked = false;
 		}
-		
+
 		if (!existReturnChecked && !existApproveChecked) {
 			//承認、差戻もチェックなしの場合、一覧へリダイレクト
 			return "redirect:/approve/request/list";
@@ -50,7 +50,7 @@ public class ApproveRequestExeController {
 				}
 			}
 		}
-		
+
 		return "redirect:/approve/request/list";
 	}
 

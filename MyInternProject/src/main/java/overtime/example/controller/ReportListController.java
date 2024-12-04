@@ -21,14 +21,14 @@ public class ReportListController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private ReportService reportService;
-	
+
 	//残業申請一覧画面表示
 	@GetMapping("report/list")
 	public String getReportList(Model model, Locale locale) {
-		
+
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -36,19 +36,19 @@ public class ReportListController {
         if (authentication == null) {
         	 return "redirect:/user/login";
         }
-        
+
         // 認証されたユーザーのIDを取得
         Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
-        
+
         // ユーザー情報を取得
         Users user = userService.getUser(currentUserId);
         model.addAttribute("user", user);
-		
+
         //報告データ一覧取得
         List<Reports> reportList = reportService.getReportList(user.getId());
         model.addAttribute("reportList", reportList);
-        
-        
+
+
         return "report/list";
 	}
 }

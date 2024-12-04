@@ -18,12 +18,13 @@
   <table class="table">
   <thead>
     <tr>
-      <th scope="col">日付</th>
-      <th scope="col">残業予定時間（開始）</th>
-      <th scope="col">残業予定時間（終了）</th>
-      <th scope="col">残業理由</th>
-      <th scope="col" class="text-center">次長確認</th>
-      <th scope="col" class="text-center">課長承認</th>
+      <th scope="col">残業予定日</th>
+      <th scope="col" class="px-0">残業予定時間（開始）</th>
+      <th scope="col" class="px-0">勤務時間</thscope="col">
+      <th scope="col" class="px-0">残業予定時間（終了）</th>
+      <th scope="col" class="w-25">残業理由</th>
+      <th scope="col" class="text-center px-0">次長確認</th>
+      <th scope="col" class="text-center px-0">課長承認</th>
     </tr>
   </thead>
   <tbody>
@@ -32,11 +33,12 @@
     <tr th:each="request : ${requestList}" 
         th:attr="data-href=@{/request/detail/{id}(id=${request.id})}"
         style="cursor: pointer;">
-      <th scope="row" th:text="${request.requestDate}"></th>
-      <td th:text="${request.startTime}"></td>
-      <td th:text="${request.endTime}"></td>
+      <th scope="row" class="px-0" th:text="${request.overtimeDate}"></th>
+      <td class="px-0" th:text="${request.startTime}"></td>
+      <td class="px-0" th:text="${request.workPatternsStartTime + '〜' + request.workPatternsEndTime}"></td>
+      <td class="px-0" th:text="${request.endTime}"></td>
       <td th:text="${request.reason}"></td>
-      <td class="text-center">
+      <td class="text-center px-0">
 		  <div th:if="${request.isChecked == 1}">
 			  <p class="mb-0">確認済</p>
 		  </div>
@@ -44,7 +46,7 @@
 			  <a class="btn btn-primary" th:text="編集・再申請" th:href="@{/request/edit/{id}(id=${request.id})}"></a>
 		  </div>
       </td>
-      <td th:text="${request.approvalStatus}" class="text-center"></td>
+      <td  class="text-center px-0" th:text="${request.approvalStatus}"></td>
     </tr>
 
   </tbody>

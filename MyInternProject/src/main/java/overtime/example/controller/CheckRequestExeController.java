@@ -16,12 +16,12 @@ public class CheckRequestExeController {
 
 	@Autowired
 	private RequestService requestService;
-	
+
 	//次長/残業申請確認更新処理
 	@PostMapping("check/request/execute")
-	public String postCheckRequestExecute(Model model, Locale locale, 
+	public String postCheckRequestExecute(Model model, Locale locale,
 			@RequestParam(value = "checkedRequests", required = false) List<Integer> checkedRequests) {
-		
+
 		if (checkedRequests == null || checkedRequests.isEmpty()) {
 			//何も選択されていない場合、一覧へリダイレクト
 			return "redirect:/check/request/list";
