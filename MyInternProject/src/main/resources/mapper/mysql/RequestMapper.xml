@@ -66,7 +66,8 @@
 		,requests.create_date_time
 		,requests.update_date_time
 		,departments.name as departments_name
-		,users.name as approval_users_name
+		,users.name as users_name
+		,approval_users.name as approval_users_name
 		,work_patterns.name as work_patterns_name
 		,work_patterns.start_time as work_patterns_start_time
 		,work_patterns.end_time as work_patterns_end_time
@@ -79,7 +80,11 @@
 	left join
 		users
 	on
-		requests.approval_users_id = users.id
+		requests.users_id = users.id
+	left join
+		users approval_users
+	on
+		requests.approval_users_id = approval_users.id
 	left join
 		work_patterns
 	on
@@ -221,6 +226,8 @@
 	update requests
 	set
 		approval_status = '承認済'
+		,approval_date = curdate()
+		,approval_users_id = #{approvalUsersId}
 	where
 		id = #{id}
 </update>

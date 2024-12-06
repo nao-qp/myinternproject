@@ -35,7 +35,7 @@ public class Reports {
 	//申請データ情報
 	private Integer departmentsId;
 	private Integer workPatternsId;
-	private LocalDate requestDate;
+	private LocalDateTime requestDate;
 	private LocalTime requestsStartTime;
 	private LocalTime requestsEndTime;
 	private LocalTime requestsRestPeriod;

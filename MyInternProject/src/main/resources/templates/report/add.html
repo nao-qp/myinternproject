@@ -12,62 +12,57 @@
 	<!-- 申請情報 -->
 	<div class="mb-3 row">
 		<!-- 表示項目 -->
-		<label for="requestDate" class="col-sm-2 col-form-label mb-2">申請日</label>
-		<div class="col-sm-10">
-			<p th:text="${report.requestDate}"></p>
-	    </div>
-	    
-		<label for="departmentsName" class="col-sm-2 col-form-label mb-2">部署名</label>
-		<div class="col-sm-10">
-			<p th:text="${report.departmentsName}"></p>
-	    </div>
-	    
-		<label for="name" class="col-sm-2 col-form-label mb-2">氏名</label>
-			<p th:text="${user.name}"></p>
-		<div class="col-sm-10">
-	  
-	    </div>
-	    
-		<label for="workPatternsId" class="col-sm-2 col-form-label mb-2">勤務パターン</label>
-	    <div class="col-sm-3">
-			<p th:text="${report.workPatternsName} + '　' + ${report.workPatternsStartTime} + ' 〜 ' + ${report.workPatternsEndTime}"></p>
-   		</div>
-   		
-   		<!-- カラム位置調整 -->
-   		<div class="col-sm-7"></div>
-	    <label for="staticEmail" class="col-sm-2 col-form-label mb-2">残業予定時間</label>
-	    <label for="startTime" class="col-sm-1 col-form-label">開始：</label>
-	    	<p th:text="${report.requestsStartTime}"></p>
-
-	    <label for="endTime" class="col-sm-1 col-form-label">終了：</label>
-	    	<p th:text="${report.requestsEndTime}"></p>
-	    	
-	    <label for="restPeriod" class="col-sm-2 col-form-label mb-2">規定休憩時間</label>
-		<div class="col-sm-10">
-			<p th:text="${report.requestsRestPeriod}"></p>
-
-	    </div>
-	    
-	    <label for="reason" class="col-sm-2 col-form-label">残業理由</label>
-		<div class="col-sm-10 mb-5">
-		  <p th:text="${report.requestsReason}"></p>
-	    </div>
-	    
-	    <div>
-			<p>承認日</p>
-			<p th:text="${report.approvalDate}"></p>
-		</div>
-		<div>
-			<p>承認者</p>
-			<p th:text="${report.approvalUsersName}"></p>
-		</div>
+		<div class="request-data-display mb-3 bg-body-tertiary">
+			<div class="py-2">
+				<h5>申請情報</h5>
+			</div>
+			<div class="row">
+				<p class="col-2">申請日</p>
+				<p class="col" th:text="${requestDate}"></p>
+			</div>
+			<div class="row">
+				<p class="col-2">部署名</p>
+				<p class="col" th:text="${report.departmentsName}"></p>
+			</div>
+			<div class="row">
+				<p class="col-2">氏名</p>
+				<p class="col" th:text="${user.name}"></p>
+			</div>
+			<div class="row">
+				<p class="col-2">勤務パターン</p>
+				<div class="col">
+					<p th:text="${report.workPatternsName} + '　' + ${report.workPatternsStartTime} + ' 〜 ' + ${report.workPatternsEndTime}"></p>
+	   			</div>
+			</div>
+			<div class="row">
+				<p class="col-2">残業予定時間</p>
+				<div class="col">
+					<p class="mb-0" th:if="${beforeOvertimeDisplay != null}" th:text="${beforeOvertimeDisplay}"></p>
+					<p class="mb-0" th:if="${afterOvertimeDisplay != null}"  th:text="${afterOvertimeDisplay}"></p>
+				</div>
+			</div>
+			<div class="row">
+				<p class="col-2">規定休憩時間</p>
+				<p class="col" th:text="${report.requestsRestPeriod}"></p>
+			</div>
+		    <div class="row">
+				<p class="col-2">残業理由</p>
+				<p class="col" th:text="${report.requestsReason}"></p>
+			</div>
+		    <div class="row">
+				<p class="col-2">承認</p>
+				<p class="col-2" th:text="${report.approvalDate}"></p>
+				<p class="col" th:text="${report.approvalUsersName}"></p>
+			</div>
+	  	</div>
+		
 
 		<!-- 残業報告入力 -->
 		<form method="post" th:action="@{/report/add/{id}(id=${report.id})}" th:object="${reportForm}">
 			<div class="mb-3 row">
 				<label class="col-sm-2 col-form-label mb-2">報告日</label>
 				<div class="col-sm-10 d-flex align-items-center">
-				  <p class="mb-1" th:text="*{reportDate}"></p>
+				  <p class="mb-1" th:text="${report.reportDate}"></p>
 			    </div>
 			    
 			    <label for="workPatternsId" class="col-sm-2 col-form-label mb-2">勤務パターン</label>
@@ -86,6 +81,7 @@
 				<div class="col-sm-10 d-flex align-items-center">
 				  <!-- 残業申請時に設定した残業実施日を設定 -->
 				  <p class="mb-1" th:text="${report.overtimeDate}"></p>
+				  <input type="date" th:field="*{overtimeDate}" hidden>
 			    </div>
 				
 				<label for="staticEmail" class="col-sm-2 col-form-label mb-2">実残業時間</label>
@@ -105,7 +101,14 @@
 	       		<div class="col-sm-5"></div>
 	       		
 			    <label for="restPeriod" class="col-sm-2 col-form-label mb-2">うち休憩時間</label>
-			    <input type="time" class="col-sm-2 ms-2 mb-2" th:field="*{restPeriod}">
+			    <label for="restStartTime" class="col-auto col-form-label">開始時間：</label>
+			    	<input type="time" class="col-sm-2 mb-2" th:field="*{restStartTime}">
+			    <!-- カラム位置調整 -->
+	       		<div class="col-sm-12"></div>
+	       		<div class="col-sm-2"></div>
+	       		
+			     <label for="restEndTime" class="col-auto col-form-label mb-2">終了時間：</label>
+			    	<input type="time" class="col-sm-2 mb-2" th:field="*{restEndTime}">
 			    <!-- カラム位置調整 -->
    				<div class="col-sm-7"></div>
    				

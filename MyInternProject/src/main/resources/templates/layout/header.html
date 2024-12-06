@@ -24,7 +24,7 @@
           </a>
           <ul class="dropdown-menu">
             <!-- 社員・次長メニュー -->
-            <li><a class="dropdown-item" th:href="@{/request/list}" th:if="${user.role == 0 || user.role == 1}">残業申請</a></li>
+            <li><a class="dropdown-item" th:href="@{/request/list?fromMenu=true}" th:if="${user.role == 0 || user.role == 1}">残業申請</a></li>
             <li><a class="dropdown-item" th:href="@{/report/list}" th:if="${user.role == 0 || user.role == 1}">残業報告</a></li>
             <!-- 次長メニュー -->
             <li th:if="${user.role == 1}"><a class="dropdown-item" th:href="@{/check/request/list}">申請確認</a>

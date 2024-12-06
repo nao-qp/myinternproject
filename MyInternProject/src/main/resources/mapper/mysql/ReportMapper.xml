@@ -69,6 +69,7 @@
 	select
 		reports.id
 		,reports.users_id
+		,reports.requests_id
 		,reports.work_patterns_id
 		,reports.report_date
 		,reports.overtime_date
@@ -80,7 +81,7 @@
 		,reports.reason
 		,reports.is_checked
 		,reports.update_date_time
-		,requests.departments_id
+		,users.departments_id
 		,requests.work_patterns_id
 		,requests.request_date
 		,requests.start_time as requests_start_time
@@ -101,17 +102,17 @@
 	on
 		reports.requests_id = requests.id
 	left join
-		departments
-	on
-		requests.departments_id = departments.id
-	left join
 		users
 	on
 		reports.users_id = users.id
 	left join
+		departments
+	on
+		users.departments_id = departments.id
+	left join
 		users approval_users
 	on
-		requests.approval_users_id = users.id
+		requests.approval_users_id = approval_users.id
 	left join
 		work_patterns
 	on

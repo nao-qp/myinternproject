@@ -2,6 +2,7 @@ package overtime.example.controller;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,9 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import overtime.example.application.service.EditForDisplayService;
 import overtime.example.domain.user.model.Reports;
+import overtime.example.domain.user.model.Requests;
 import overtime.example.domain.user.model.Users;
 import overtime.example.domain.user.service.ReportService;
+import overtime.example.domain.user.service.RequestService;
 import overtime.example.domain.user.service.UserService;
 import overtime.example.domain.user.service.impl.CustomUserDetails;
 
@@ -25,6 +29,12 @@ public class ReportDetailController {
 
 	@Autowired
 	private ReportService reportService;
+	
+	@Autowired
+	private RequestService requestService;
+	
+	@Autowired
+	private EditForDisplayService editForDisplayService;
 
 	//残業報告詳細画面表示
 	@GetMapping("report/detail/{id}")
@@ -49,11 +59,53 @@ public class ReportDetailController {
         Reports report = reportService.getReport(id);	//reportテーブルのid
         model.addAttribute("report", report);
 
+        ////申請書欄設定
+        //申請書情報を取得
+        Requests request = requestService.getRequest(report.getRequestsId());
+        if (request != null) {
+        	//申請欄を設定
+            editForDisplayService.editRequestForm(model, request);
+        } else {
+        	//申請なしの場合、承認日の枠だけ表示
+        	String approvalDate = "　　年　　月　　日";
+        	model.addAttribute("approvalDate", approvalDate);
+        }
+        
+
         //報告日を編集
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
-        String reportDate = (report.getUpdateDateTime()).format(formatter);
+//        String reportDate = (report.getUpdateDateTime()).format(formatter);
+        String reportDate = (report.getReportDate()).format(formatter);
         model.addAttribute("reportDate", reportDate);
 
+        //実残業時間を編集
+        //前残業、後残業表示データ作成
+        Map<String, String> overtimeBefAftDisplayMap = editForDisplayService.getOvertimeBefAftDisplay(
+		        		report.getStartTime(), report.getEndTime(),
+		        		report.getWorkPatternsStartTime(), report.getWorkPatternsEndTime());
+        String beforeOvertimeDisplayReport = null;
+        String afterOvertimeDisplayReport = null;
+        if (overtimeBefAftDisplayMap.get("before") != null) {
+        	beforeOvertimeDisplayReport = overtimeBefAftDisplayMap.get("before");
+        }
+        if (overtimeBefAftDisplayMap.get("after") != null) {
+        	afterOvertimeDisplayReport = overtimeBefAftDisplayMap.get("after");
+        }
+        model.addAttribute("beforeOvertimeDisplayReport", beforeOvertimeDisplayReport);
+        model.addAttribute("afterOvertimeDisplayReport", afterOvertimeDisplayReport);
+        
+        String restPeriod = "";
+        if (report.getRestPeriod() > 0) {
+        	restPeriod = report.getRestPeriod() + "　分";
+        }
+        
+        model.addAttribute("restPeriod", restPeriod);
+
+       
+        
+        
+        
+        
 		return "report/detail";
 	}
 

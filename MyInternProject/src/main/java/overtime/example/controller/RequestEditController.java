@@ -93,6 +93,6 @@ public class RequestEditController {
         request.setRestPeriod(LocalTime.of(0, 0));	//TODO:規定休憩時間を設定する
         requestService.updateEdit(request);
 
-		return "redirect:/request/list";
+		return "redirect:/request/list?fromMenu=true";
 	}
 }

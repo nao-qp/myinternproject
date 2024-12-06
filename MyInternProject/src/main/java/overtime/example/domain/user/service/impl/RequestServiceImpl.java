@@ -53,8 +53,8 @@ public class RequestServiceImpl implements RequestService {
 
 	/** 課長//残業申請承認更新処理 */
 	@Override
-	public int updateApproved(Integer id) {
-		return mapper.updateOneApprove(id);
+	public int updateApproved(Integer id, Integer approvalUsersId) {
+		return mapper.updateOneApprove(id, approvalUsersId);
 	}
 
 	/** 課長//残業申請差し戻し更新処理 */

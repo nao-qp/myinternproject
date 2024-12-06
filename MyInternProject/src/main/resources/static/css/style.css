@@ -4,3 +4,39 @@
 .width-150 {
 	width:150px;
 }
+
+.width-400 {
+	width: 400px;
+}
+
+/** 高さ調整 */
+.height-165 {
+	height: 165px;
+}
+
+/** 申請書レイアウト */
+.requestform-table {
+      width: 800px;
+     
+    }
+
+.requestform-header {
+	width:200px;
+	
+}
+
+/** 報告入力画面申請情報表示欄 */
+.request-data-display p {
+	margin-bottom: 5px;
+}
+
+
+
+/** 印刷調整 */
+@media print {
+    .navbar,
+    .footer {
+        display: none;
+    }
+
+}

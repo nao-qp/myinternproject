@@ -25,7 +25,7 @@ public interface RequestService {
 	public List<Requests> getApproveDataList();
 
 	/** 課長//残業申請承認更新処理 */
-	public int updateApproved(Integer id);
+	public int updateApproved(Integer id, Integer approvalUsersId);
 
 	/** 課長//残業申請差し戻し更新処理 */
 	public int updateReturn(Integer id);

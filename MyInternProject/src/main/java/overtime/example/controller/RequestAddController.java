@@ -1,6 +1,7 @@
 package overtime.example.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
@@ -70,7 +71,7 @@ public class RequestAddController {
         model.addAttribute("user", user);
 
         //申請日に今日の日付を設定
-        form.setRequestDate(LocalDate.now());
+        form.setRequestDate(LocalDateTime.now());
 
         //勤務パターンマスター取得
         List<WorkPatterns> workPatternList = workPatternService.getWorkPatternMaster();
@@ -135,6 +136,6 @@ public class RequestAddController {
         
         reportService.addReport(report);
 
-		return "redirect:/request/list";
+		return "redirect:/request/list?fromMenu=true";
 	}
 }

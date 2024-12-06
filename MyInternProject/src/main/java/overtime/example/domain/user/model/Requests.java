@@ -12,7 +12,7 @@ public class Requests {
 	private Integer usersId;
 	private Integer departmentsId;
 	private Integer workPatternsId;
-	private LocalDate requestDate;
+	private LocalDateTime requestDate;
 	private LocalDate overtimeDate;
 	private LocalTime startTime;
 	private LocalTime endTime;

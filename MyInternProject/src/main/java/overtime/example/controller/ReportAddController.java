@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import overtime.example.application.service.CalcOvertimeService;
+import overtime.example.application.service.EditForDisplayService;
 import overtime.example.application.service.TimeConverterService;
 import overtime.example.domain.user.model.Overtime;
 import overtime.example.domain.user.model.Reports;
@@ -48,6 +50,9 @@ public class ReportAddController {
 
 	@Autowired
 	private CalcOvertimeService calcOvertimeService;
+	
+	@Autowired
+	private EditForDisplayService editForDisplayService;
 
 	//報告書入力画面表示
 	@GetMapping("report/add/{id}")
@@ -72,21 +77,37 @@ public class ReportAddController {
         //報告データを取得
         Reports report = reportService.getReport(id);
         model.addAttribute("report", report);
-        //勤務パターン情報をformに設定
-        form.setWorkPatternsId(report.getWorkPatternsId());
-
+        
+        //既存データを初期値に設定
+        form = modelMapper.map(report, ReportForm.class);
+        model.addAttribute("reportForm", form);
+        
         //報告日設定
         LocalDate reportDate = LocalDate.now();
         report.setReportDate(reportDate);
-        
-        form.setWorkPatternsStartTime(report.getWorkPatternsStartTime());
-        form.setWorkPatternsEndTime(report.getWorkPatternsEndTime());
 
+        //休憩時間の初期値を00:00に設定
+        form.setRestStartTime(LocalTime.of(0, 0));
+        form.setRestEndTime(LocalTime.of(0, 0));
+        
+        //申請情報欄設定
+        Map<String, String> overtimeBefAftDisplayMap = 
+        		editForDisplayService.getOvertimeBefAftDisplay(
+        				report.getRequestsStartTime(), report.getRequestsEndTime(),
+        				report.getWorkPatternsStartTime(), report.getWorkPatternsEndTime());
+        String beforeOvertimeDisplay = overtimeBefAftDisplayMap.get("before");
+        String afterOvertimeDisplay = overtimeBefAftDisplayMap.get("after");
+        model.addAttribute("beforeOvertimeDisplay", beforeOvertimeDisplay);
+        model.addAttribute("afterOvertimeDisplay", afterOvertimeDisplay);
+        //申請日編集
+        LocalDate requestDate = report.getRequestDate().toLocalDate();
+        model.addAttribute("requestDate", requestDate);
+        
         //残業時間の初期値設定
         //残業申請書作成時のデータを初期値として設定する
         //TODO:報告データ修正機能を作成した場合は、1回目の更新かどうか判定して処理を分ける
-        form.setStartTime(report.getRequestsStartTime());
-        form.setEndTime(report.getRequestsEndTime());
+//        form.setStartTime(report.getRequestsStartTime());
+//        form.setEndTime(report.getRequestsEndTime());
 
 		return "report/add";
 	}
@@ -104,21 +125,75 @@ public class ReportAddController {
         	 return "redirect:/user/login";
         }
 
+        // 認証されたユーザーのIDを取得
+        Integer currentUserId = ((CustomUserDetails) authentication.getPrincipal()).getId();
+        
         ////報告データ更新
         Reports report = modelMapper.map(form, Reports.class);
         report.setId(id);
+        report.setUsersId(currentUserId);
+        
         //報告日設定
         LocalDate reportDate = LocalDate.now();
         report.setReportDate(reportDate);
+        
+        //勤務パターン開始時間終了時間取得
+        WorkPatterns workPattern = workPatternService.getWorkPattern(report.getWorkPatternsId());
+        //前残業開始時間、後残業終了時間が未設定の場合、通常勤務時間を設定する。
+        if (report.getStartTime() == null) {
+        	report.setStartTime(workPattern.getStartTime());
+        }
+        if (report.getEndTime() == null) {
+        	report.setEndTime(workPattern.getEndTime());
+        }
+        
         //休憩時間設定
         report.setRestPeriod(
         		timeConverterService.toMinutesGetTimeDifference(report.getRestStartTime(), report.getRestEndTime())
         		);
         
-        //残業時間計算
-//        timeConverterService.toMinutesGetOvertime(report.getWorkPatternsStartTime(), report.getWorkPatternsEndTime(),
-//        						report.getStartTime(), report.getEndTime(), report.getRestPeriod());
-
+      //残業時間計算
+        //休日
+        if (calcOvertimeService.isWeekend(report.getOvertimeDate())) {
+        	Overtime updOvertimEmn = calcOvertimeService.toMinutesGetOvertimeHday(
+	        		report.getUsersId(), 
+	        		report.getStartTime(), report.getEndTime(), 
+	        		report.getRestStartTime(), report.getRestEndTime());
+        	
+        	//作成データの実残業時間
+        	report.setActualOvertime(updOvertimEmn.getActualOvertime());
+        	//作成データまでの累計残業時間
+        	report.setWdayDtUnder60(0);
+        	report.setWdayDtOver60(0);
+        	report.setWdayEmnUnder60(0);
+        	report.setWdayEmnOver60(0);
+            report.setHdayDtUnder60(updOvertimEmn.getHdayDtUnder60());
+        	report.setHdayDtOver60(updOvertimEmn.getHdayDtOver60());
+        	report.setHdayEmnUnder60(updOvertimEmn.getHdayEmnUnder60());
+        	report.setHdayEmnOver60(updOvertimEmn.getHdayEmnOver60());
+        	
+        } else {
+        //平日
+        	Overtime updOvertimDt = calcOvertimeService.toMinutesGetOvertimeWday(
+						        		report.getUsersId(), 
+						        		workPattern.getStartTime(), workPattern.getEndTime(), 
+						        		report.getStartTime(), report.getEndTime(), 
+						        		report.getRestStartTime(), report.getRestEndTime());
+        	
+        	//作成データの実残業時間
+        	report.setActualOvertime(updOvertimDt.getActualOvertime());
+        	//作成データまでの累計残業時間
+        	report.setWdayDtUnder60(updOvertimDt.getWdayDtUnder60());
+        	report.setWdayDtOver60(updOvertimDt.getWdayDtOver60());
+        	report.setWdayEmnUnder60(updOvertimDt.getWdayEmnUnder60());
+        	report.setWdayEmnOver60(updOvertimDt.getWdayEmnOver60());
+        	report.setHdayDtUnder60(0);
+        	report.setHdayDtOver60(0);
+        	report.setHdayEmnUnder60(0);
+        	report.setHdayEmnOver60(0);
+        }
+        
+        
         reportService.editReport(report);
 
 		return "redirect:/report/list";

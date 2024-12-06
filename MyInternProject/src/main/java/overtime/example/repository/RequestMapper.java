@@ -28,7 +28,7 @@ public interface RequestMapper {
 	public List<Requests> findManyApproveData();
 
 	/** 課長//残業申請承認更新処理 */
-	public int updateOneApprove(Integer id);
+	public int updateOneApprove(Integer id, Integer approvalUsersId);
 
 	/** 課長//残業申請差し戻し更新処理 */
 	public int updateOneReturn(Integer id);
