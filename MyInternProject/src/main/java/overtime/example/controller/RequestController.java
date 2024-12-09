@@ -38,6 +38,9 @@ public class RequestController {
 	public String getRequestList(Model model, Locale locale,
 			@RequestParam(value = "fromMenu", required = false) String fromMenu ) {
 
+		// 他のモデルデータ
+	    model.addAttribute("pdfGeneration", false); // PDF生成フラグ
+	      
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -81,6 +84,9 @@ public class RequestController {
 	@GetMapping("request/detail/{id}")
 	public String getRequestDetail(Model model, Locale locale, @PathVariable("id") Integer id) {
 
+		// 他のモデルデータ
+	      model.addAttribute("pdfGeneration", false); // PDF生成フラグ
+	      
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

@@ -15,6 +15,10 @@ public class LoginController {
   @GetMapping("/user/login")
   public String getLogin(Model model, LoginForm form, Locale locale) {
 	  model.addAttribute("page", "login");
+	  
+	  // 他のモデルデータ
+      model.addAttribute("pdfGeneration", false); // PDF生成フラグ
+      
   return "user/login";
   }
 

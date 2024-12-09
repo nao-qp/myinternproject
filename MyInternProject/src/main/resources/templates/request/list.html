@@ -12,7 +12,7 @@
 	  <h3>残 業 申 請 一 覧</h3>
   </div>
   <div>
-	 <a class="btn btn-primary" th:text="新規作成" href="/request/add"></a>
+	 <a class="btn btn-primary" th:text="新規作成" th:href="@{/request/add}"></a>
   </div>
   <!-- 申請一覧 -->
   <table class="table">
@@ -20,7 +20,7 @@
     <tr>
       <th scope="col">残業予定日</th>
       <th scope="col" class="px-0">残業予定時間（開始）</th>
-      <th scope="col" class="px-0">勤務時間</thscope="col">
+      <th scope="col" class="px-0">勤務時間</th>
       <th scope="col" class="px-0">残業予定時間（終了）</th>
       <th scope="col" class="w-25">残業理由</th>
       <th scope="col" class="text-center px-0">次長確認</th>
