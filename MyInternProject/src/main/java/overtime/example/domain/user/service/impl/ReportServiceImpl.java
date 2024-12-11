@@ -22,6 +22,14 @@ public class ReportServiceImpl implements ReportService {
 	public int addReport(Reports report) {
 		return mapper.insertOne(report);
 	}
+	
+	/** 報告データ一1件修正更新 */
+	/** 申請書差戻編集時の変更内容をreportデータに反映 */
+	@Override
+	public int updateEditReport(Reports report) {
+		return mapper.updateEditOne(report);
+	}
+	
 
 	/** 社員/報告データ一一覧取得 */
 	@Override

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import jakarta.validation.Valid;
 import overtime.example.domain.user.model.Reports;
 import overtime.example.domain.user.model.Requests;
 import overtime.example.domain.user.model.Users;
@@ -77,19 +81,53 @@ public class RequestAddController {
         List<WorkPatterns> workPatternList = workPatternService.getWorkPatternMaster();
         model.addAttribute("workPatternList", workPatternList);
 
+        //勤務パターンの初期値の設定
+        //画面初期表示
+        if (form.getWorkPatternsId() == null) {
+        	model.addAttribute("initialDisplayWorkPatternsId", user.getWorkPatternsId());
+        } else {
+       //バリデーションからの画面再表示の場合
+        	model.addAttribute("initialDisplayWorkPatternsId", form.getWorkPatternsId());
+        }
+
         //残業実施日の初期値を設定
         form.setOvertimeDate(LocalDate.now());
 
         //休憩時間の初期値を00:00に設定
         form.setRestPeriod(LocalTime.of(0, 0));
 
+        form.setWorkPatternsStartTime(null);
+        
 		return "request/add";
 	}
 
 	//申請書新規作成更新処理
 	@PostMapping("request/add")
-	public String postRequestAdd(Model model, @ModelAttribute RequestForm form, Locale locale) {
+	public String postRequestAdd(Model model, 
+			@ModelAttribute @Valid RequestForm form, BindingResult bindingResult, Locale locale) {
 
+		//バリデーション
+		if (bindingResult.hasErrors()) {
+			// クラスレベルのエラーメッセージをビューに渡す
+			// bindingResultのcodeに含まれているバリデーション名でフィルターしそれぞれのエラーメッセージを振り分ける
+			List<ObjectError> startEndisNullErrors = bindingResult.getGlobalErrors().stream()
+					.filter(error -> error.getCode().contains("StartAndEndIsNull"))  
+		            .collect(Collectors.toList());
+			List<ObjectError> startTimeErrors = bindingResult.getGlobalErrors().stream()
+					.filter(error -> error.getCode().contains("StartBeforeWorkStart"))  
+		            .collect(Collectors.toList());
+		    List<ObjectError> endTimeErrors = bindingResult.getGlobalErrors().stream()
+		    		.filter(error -> error.getCode().contains("EndAfterWorkEnd"))  
+		            .collect(Collectors.toList());
+		    
+	        // モデルにエラーメッセージを追加
+	    	model.addAttribute("startEndisNullErrors", startEndisNullErrors);
+	        model.addAttribute("startTimeErrors", startTimeErrors);
+	        model.addAttribute("endTimeErrors", endTimeErrors);
+		          
+	        return getRequestAdd(model, form, locale);
+	       }
+		
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

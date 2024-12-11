@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import jakarta.validation.Valid;
 import overtime.example.application.service.CalcOvertimeService;
 import overtime.example.application.service.EditForDisplayService;
 import overtime.example.application.service.TimeConverterService;
@@ -56,7 +60,7 @@ public class ReportAddController {
 
 	//報告書入力画面表示
 	@GetMapping("report/add/{id}")
-	public String getReportAdd(Model model, Locale locale, ReportForm form,
+	public String getReportAdd(Model model, Locale locale, @ModelAttribute ReportForm form,
 									@PathVariable("id") Integer id) {
 
 		// 現在のユーザーの認証情報を取得
@@ -78,17 +82,32 @@ public class ReportAddController {
         Reports report = reportService.getReport(id);
         model.addAttribute("report", report);
         
-        //既存データを初期値に設定
-        form = modelMapper.map(report, ReportForm.class);
+        //バリデーションからの再表示の場合を考慮
+        if (form.getWorkPatternsId() == null) {
+        	//画面初期表示の場合
+        	//既存データを初期値に設定
+            form = modelMapper.map(report, ReportForm.class);
+            //休憩時間の初期値を00:00に設定
+            form.setRestStartTime(LocalTime.of(0, 0));
+            form.setRestEndTime(LocalTime.of(0, 0));
+            
+            //残業開始時間と勤務パターン開始時間が同じならformに時間をセットしない。
+        	//（同じ時間を入力できないようにバリデーションしているため。）
+        	if (report.getStartTime().equals(report.getWorkPatternsStartTime())) {
+        		form.setStartTime(null);
+        	}
+        	//終了時間も同様
+        	if (report.getEndTime().equals(report.getWorkPatternsEndTime())) {
+        		form.setEndTime(null);
+        	}
+        }
+   
         model.addAttribute("reportForm", form);
         
         //報告日設定
         LocalDate reportDate = LocalDate.now();
         report.setReportDate(reportDate);
 
-        //休憩時間の初期値を00:00に設定
-        form.setRestStartTime(LocalTime.of(0, 0));
-        form.setRestEndTime(LocalTime.of(0, 0));
         
         //申請情報欄設定
         Map<String, String> overtimeBefAftDisplayMap = 
@@ -103,6 +122,10 @@ public class ReportAddController {
         LocalDate requestDate = report.getRequestDate().toLocalDate();
         model.addAttribute("requestDate", requestDate);
         
+        //残業理由の改行を表示する
+        String requestReasonWithBr = editForDisplayService.convertNewlinesToBr(report.getRequestsReason());
+        model.addAttribute("requestReasonWithBr", requestReasonWithBr);
+        
         //残業時間の初期値設定
         //残業申請書作成時のデータを初期値として設定する
         //TODO:報告データ修正機能を作成した場合は、1回目の更新かどうか判定して処理を分ける
@@ -114,9 +137,31 @@ public class ReportAddController {
 
 	//報告書更新処理
 	@PostMapping("report/add/{id}")
-	public String postReportAdd(Model model, Locale locale, @ModelAttribute ReportForm form,
-									@PathVariable("id") Integer id) {
+	public String postReportAdd(Model model, Locale locale, 
+			@ModelAttribute @Valid ReportForm form, BindingResult bindingResult, @PathVariable("id") Integer id) {
 
+		//バリデーション
+		if (bindingResult.hasErrors()) {
+			// クラスレベルのエラーメッセージをビューに渡す
+			// bindingResultのcodeに含まれているバリデーション名でフィルターしそれぞれのエラーメッセージを振り分ける
+			List<ObjectError> startEndisNullErrors = bindingResult.getGlobalErrors().stream()
+					.filter(error -> error.getCode().contains("ReportStartAndEndIsNull"))  
+		            .collect(Collectors.toList());
+			List<ObjectError> startTimeErrors = bindingResult.getGlobalErrors().stream()
+					.filter(error -> error.getCode().contains("ReportStartBeforeWorkStart"))  
+		            .collect(Collectors.toList());
+		    List<ObjectError> endTimeErrors = bindingResult.getGlobalErrors().stream()
+		    		.filter(error -> error.getCode().contains("ReportEndAfterWorkEnd"))  
+		            .collect(Collectors.toList());
+		    
+	        // モデルにエラーメッセージを追加
+	    	model.addAttribute("startEndisNullErrors", startEndisNullErrors);
+	        model.addAttribute("startTimeErrors", startTimeErrors);
+	        model.addAttribute("endTimeErrors", endTimeErrors);
+		          
+	        return getReportAdd(model, locale, form, id);
+		}
+				
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -226,20 +271,54 @@ public class ReportAddController {
         LocalDate reportDate = LocalDate.now();
         model.addAttribute("reportDate", reportDate);
 
-        //残業実施日の初期値を設定
-        form.setOvertimeDate(LocalDate.now());
+        //バリデーションからの画面表示を考慮
+        if (form.getWorkPatternsId() == null) {
+        	//画面初期表示の場合
+        	//勤務パターンはユーザー情報を初期値にする
+        	model.addAttribute("initialDisplayWorkPatternsId", user.getWorkPatternsId());
+        	
+        	//残業実施日の初期値を設定
+            form.setOvertimeDate(LocalDate.now());
 
-        //休憩時間の初期値を00:00に設定
-        form.setRestStartTime(LocalTime.of(0, 0));
-        form.setRestEndTime(LocalTime.of(0, 0));
+            //休憩時間の初期値を00:00に設定
+            form.setRestStartTime(LocalTime.of(0, 0));
+            form.setRestEndTime(LocalTime.of(0, 0));
+        } else {
+        	//バリデーションからの画面再表示
+        	//画面で設定していた勤務パターンを設定する
+        	model.addAttribute("initialDisplayWorkPatternsId", form.getWorkPatternsId());
+        }
 
 		return "report/new-add";
 	}
 
 	//報告書新規作成（事後報告）
 	@PostMapping("report/new-add")
-	public String postNewReportAdd(Model model, Locale locale, @ModelAttribute ReportForm form) {
+	public String postNewReportAdd(Model model, Locale locale, 
+			@ModelAttribute @Valid  ReportForm form, BindingResult bindingResult) {
 
+		//バリデーション
+		if (bindingResult.hasErrors()) {
+			// クラスレベルのエラーメッセージをビューに渡す
+			// bindingResultのcodeに含まれているバリデーション名でフィルターしそれぞれのエラーメッセージを振り分ける
+			List<ObjectError> startEndisNullErrors = bindingResult.getGlobalErrors().stream()
+					.filter(error -> error.getCode().contains("ReportStartAndEndIsNull"))  
+		            .collect(Collectors.toList());
+			List<ObjectError> startTimeErrors = bindingResult.getGlobalErrors().stream()
+					.filter(error -> error.getCode().contains("ReportStartBeforeWorkStart"))  
+		            .collect(Collectors.toList());
+		    List<ObjectError> endTimeErrors = bindingResult.getGlobalErrors().stream()
+		    		.filter(error -> error.getCode().contains("ReportEndAfterWorkEnd"))  
+		            .collect(Collectors.toList());
+		    
+	        // モデルにエラーメッセージを追加
+	    	model.addAttribute("startEndisNullErrors", startEndisNullErrors);
+	        model.addAttribute("startTimeErrors", startTimeErrors);
+	        model.addAttribute("endTimeErrors", endTimeErrors);
+		          
+	        return getNewReportAdd(model, locale, form);
+		}
+				
 		// 現在のユーザーの認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

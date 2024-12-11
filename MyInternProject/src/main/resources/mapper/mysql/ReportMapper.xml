@@ -30,6 +30,20 @@
 		)
 </insert>
 
+<!-- 報告データ一1件修正更新 -->
+<!-- 申請書差戻編集時の変更内容をreportデータに反映 -->
+<update id="updateEditOne">
+	update
+		reports
+	set
+		work_patterns_id = #{workPatternsId}
+		,start_time = #{startTime}
+		,end_time = #{endTime}
+	where
+		requests_id	= #{requestsId}
+</update>
+
+
 <!-- 社員//報告データ一一覧取得 -->
 <!-- 申請データ承認済　または　報告データ事後報告　を取得 -->
 <select id="findMany" resultType="Reports">
@@ -82,7 +96,7 @@
 		,reports.is_checked
 		,reports.update_date_time
 		,users.departments_id
-		,requests.work_patterns_id
+<!--		,requests.work_patterns_id-->
 		,requests.request_date
 		,requests.start_time as requests_start_time
 		,requests.end_time as requests_end_time

@@ -14,6 +14,15 @@
 	height: 165px;
 }
 
+/** 申請書、報告書一覧表示文章表示調整 */
+.text-overflow {
+    white-space: nowrap; /* 折り返しを無効にして1行で表示 */
+    overflow: hidden;    /* はみ出た部分を非表示にする */
+    text-overflow: ellipsis; /* 省略記号「...」を表示する */
+    max-width: 300px;
+}
+
+
 /** 申請書レイアウト */
 .requestform-table {
       width: 800px;

@@ -14,6 +14,10 @@ public interface ReportMapper {
 	/** 報告データ1件作成 */
 	public int insertOne(Reports report);
 
+	/** 報告データ一1件修正更新 */
+	/** 申請書差戻編集時の変更内容をreportデータに反映 */
+	public int updateEditOne(Reports report);
+	
 	/** 社員/報告データ一一覧取得 */
 	public List<Reports> findMany(Integer id);
 

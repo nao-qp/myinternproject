@@ -60,7 +60,7 @@ public class ReportDetailController {
         model.addAttribute("report", report);
 
         ////申請書欄設定
-        //申請書情報を取得
+        //承認欄用に申請書情報を取得する
         Requests request = requestService.getRequest(report.getRequestsId());
         if (request != null) {
         	//申請欄を設定
@@ -71,10 +71,13 @@ public class ReportDetailController {
         	model.addAttribute("approvalDate", approvalDate);
         }
         
+        //残業理由の改行を表示する
+        String requestReasonWithBr = editForDisplayService.convertNewlinesToBr(report.getRequestsReason());
+        model.addAttribute("requestReasonWithBr", requestReasonWithBr);
+        
 
         //報告日を編集
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
-//        String reportDate = (report.getUpdateDateTime()).format(formatter);
         String reportDate = (report.getReportDate()).format(formatter);
         model.addAttribute("reportDate", reportDate);
 
@@ -101,11 +104,10 @@ public class ReportDetailController {
         
         model.addAttribute("restPeriod", restPeriod);
 
-       
-        
-        
-        
-        
+        //残業報告の改行を表示する
+        String reportReasonWithBr = editForDisplayService.convertNewlinesToBr(report.getReason());
+        model.addAttribute("reportReasonWithBr", reportReasonWithBr);
+   
 		return "report/detail";
 	}
 

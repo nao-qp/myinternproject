@@ -43,10 +43,10 @@
 			</div>
 		  </td>
 	      <th scope="row" class="px-0" th:text="${report.overtimeDate}"></th>
-	      <td class="px-0" th:text="${report.StartTime}"></td>
-	      <td class="px-0" th:text="${report.workPatternsStartTime + '〜' + report.workPatternsEndTime}"></td>
-	      <td class="px-0" th:text="${report.EndTime}"></td>
-	      <td th:text="${report.Reason}"></td>
+	      <td class="px-0" th:text="${report.StartTime + ' 〜'}"></td>
+	      <td class="px-0 text-secondary" th:text="${report.workPatternsStartTime + '〜' + report.workPatternsEndTime}"></td>
+	      <td class="px-0" th:text="${'〜 ' +report.EndTime}"></td>
+	      <td class="text-overflow" th:text="${report.Reason}"></td>
 	      <td class="text-center">
 			  <div th:if="${report.isChecked == 1}">
 				  <p class="mb-0">確認済</p>

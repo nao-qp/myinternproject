@@ -36,10 +36,10 @@
 	        style="cursor: pointer;">
 	      <th scope="row" class="px-0" th:text="${report.overtimeDate}"></th>
 	      <td th:text="${report.usersName}"></td>
-	      <td class="px-0" th:text="${report.startTime}"></td>
-	      <td class="px-0" th:text="${report.workPatternsStartTime + '〜' + report.workPatternsEndTime}"></td>
-	      <td class="px-0" th:text="${report.endTime}"></td>
-	      <td th:text="${report.reason}"></td>
+	      <td class="px-0" th:text="${report.startTime+ ' 〜'}"></td>
+	      <td class="px-0 text-secondary" th:text="${report.workPatternsStartTime + '〜' + report.workPatternsEndTime}"></td>
+	      <td class="px-0" th:text="${'〜 ' +report.endTime}"></td>
+	      <td class="text-overflow" th:text="${report.reason}"></td>
 	      <!-- 確認欄はリンクなし -->
 	      <td class="d-flex justify-content-center" th:onclick="event.stopPropagation();">
 	          <!-- チェックボックスを表示 -->

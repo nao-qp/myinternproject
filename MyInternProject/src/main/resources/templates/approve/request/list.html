@@ -38,10 +38,10 @@
 	        style="cursor: pointer;">
 	      <th scope="row" class="px-0" th:text="${request.overtimeDate}"></th>
 	      <td th:text="${request.usersName}"></td>
-	      <td class="px-0" th:text="${request.startTime}"></td>
-	      <td class="px-0" th:text="${request.workPatternsStartTime + '〜' + request.workPatternsEndTime}"></td>
-	      <td class="px-0" th:text="${request.endTime}"></td>
-	      <td th:text="${request.reason}"></td>
+	      <td class="px-0" th:text="${request.startTime + ' 〜'}"></td>
+	      <td class="px-0 text-secondary" th:text="${request.workPatternsStartTime + '〜' + request.workPatternsEndTime}"></td>
+	      <td class="px-0" th:text="${'〜 ' + request.endTime}"></td>
+	      <td class="text-overflow" th:text="${request.reason}"></td>
 	      <!-- 差戻欄はリンクなし -->
 	      <td class="text-center" th:onclick="event.stopPropagation();">
 		    <input type="checkbox" name="returnRequests" th:value="${request.id}"

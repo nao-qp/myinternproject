@@ -117,7 +117,14 @@ public class EditForDisplayService {
         //報告欄フォーマット
         String reportDate = "　　年　　月　　日";
         model.addAttribute("reportDate", reportDate);
-		
-		
+
+	}
+	
+	// 改行を <br> タグに変換するメソッド
+	public String convertNewlinesToBr(String input) {
+	    if (input == null) {
+	        return "";
+	    }
+	    return input.replace("\n", "<br>");
 	}
 }

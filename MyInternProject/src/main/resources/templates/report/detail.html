@@ -32,7 +32,7 @@
 			</tr>
 			<tr>
 				<td class="requestform-header height-165">残業理由</td>
-				<td th:text="${report.requestsReason}"></td>
+				<td th:utext="${requestReasonWithBr}"></td>
 			</tr>
 			<tr>
 				<td colspan="2">
@@ -63,7 +63,7 @@
 			</tr>
 			<tr>
 				<td class="requestform-header height-165">残業報告</td>
-				<td th:text="${report.reason}"></td>
+				<td th:utext="${reportReasonWithBr}"></td>
 			</tr>
 			<tr>
 				<td colspan="2">

@@ -46,7 +46,14 @@
                 // 終了時間
                 endTimeDisplay.textContent = `${formatTime(selectedPattern.endTime)}〜`;
             }
+            
+            // formの隠し項目に選択している勤務パターンの開始終了時間を設定する。
+			// （バリデーションで使用）
+			document.getElementById('workPatternsStartTime').value = selectedPattern.startTime;
+			document.getElementById('workPatternsEndTime').value = selectedPattern.endTime;
+            
 			}
+			
 	
 		// 時間のフォーマット関数
 	    function formatTime(time) {

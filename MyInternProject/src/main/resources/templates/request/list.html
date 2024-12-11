@@ -34,10 +34,10 @@
         th:attr="data-href=@{/request/detail/{id}(id=${request.id})}"
         style="cursor: pointer;">
       <th scope="row" class="px-0" th:text="${request.overtimeDate}"></th>
-      <td class="px-0" th:text="${request.startTime}"></td>
-      <td class="px-0" th:text="${request.workPatternsStartTime + '〜' + request.workPatternsEndTime}"></td>
-      <td class="px-0" th:text="${request.endTime}"></td>
-      <td th:text="${request.reason}"></td>
+      <td class="px-0" th:text="${request.startTime} + ' 〜'"></td>
+      <td class="px-0 text-secondary" th:text="${request.workPatternsStartTime + '〜' + request.workPatternsEndTime}"></td>
+      <td class="px-0" th:text="${'〜 ' + request.endTime}"></td>
+      <td class="text-overflow" th:text="${request.reason}"></td>
       <td class="text-center px-0">
 		  <div th:if="${request.isChecked == 1}">
 			  <p class="mb-0">確認済</p>

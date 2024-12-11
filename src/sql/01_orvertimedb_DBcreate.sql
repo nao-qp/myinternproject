@@ -1,15 +1,15 @@
---DB作成
-create database overtimedb;
+-- DB作成
+create database IF NOT EXISTS overtimedb;
 USE overtimedb;
 
---文字コード、文字照合順序を設定
+-- 文字コード、文字照合順序を設定
 ALTER DATABASE overtimedb
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 
---テーブル作成
-CREATE TABLE users (
+-- テーブル作成
+CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
     account VARCHAR(20) NOT NULL COMMENT '社員番号',
     pass VARCHAR(60) NOT NULL COMMENT 'パスワード',
@@ -26,12 +26,12 @@ CREATE TABLE users (
 ) COMMENT = 'ユーザー情報'
 ;
 
-CREATE TABLE requests(
+CREATE TABLE IF NOT EXISTS requests(
     id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
     users_id INT NOT NULL COMMENT 'ユーザーID',
     departments_id INT NOT NULL COMMENT '部署ID',
     work_patterns_id INT NOT NULL COMMENT '勤務パターンID',
-    request_date DATE NOT NULL COMMENT '申請日',
+    request_date DATETIME NOT NULL COMMENT '申請日',
     overtime_date DATE NOT NULL COMMENT '残業実施日',
     start_time TIME NOT NULL COMMENT '前残業開始時間',
     end_time TIME NOT NULL COMMENT '後残業終了時間',
@@ -47,7 +47,7 @@ CREATE TABLE requests(
 ) COMMENT = '残業申請データ'
 ;
 
-CREATE TABLE roles (
+CREATE TABLE IF NOT EXISTS roles (
     id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
     name VARCHAR(20) NOT NULL COMMENT '役職名',
     role VARCHAR(3) NOT NULL COMMENT '権限',
@@ -57,7 +57,7 @@ CREATE TABLE roles (
 ) COMMENT = '役職・権限マスター'
 ;
 
-CREATE TABLE departments (
+CREATE TABLE IF NOT EXISTS departments (
     id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
     name VARCHAR(30) NOT NULL COMMENT '部署名',
     create_date_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登録日時',
@@ -66,7 +66,7 @@ CREATE TABLE departments (
 ) COMMENT = '部署マスター'
 ;
 
-CREATE TABLE work_patterns (
+CREATE TABLE IF NOT EXISTS work_patterns (
     id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
     name VARCHAR(10) NOT NULL COMMENT '勤務パターン名',
     start_time TIME NOT NULL COMMENT '開始時刻',
@@ -77,7 +77,7 @@ CREATE TABLE work_patterns (
 ) COMMENT = '勤務パターンマスター'
 ;
 
-CREATE TABLE reports(
+CREATE TABLE IF NOT EXISTS reports(
     id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
     users_id INT NOT NULL COMMENT 'ユーザーID',
     requests_id INT NOT NULL COMMENT '申請ID',
