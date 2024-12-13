@@ -9,6 +9,19 @@
 	width: 400px;
 }
 
+.width-180 {
+	width: 180px;
+}
+
+.width-150 {
+	width: 150px;
+}
+
+.width-120 {
+	width: 120px;
+}
+
+
 /** 高さ調整 */
 .height-165 {
 	height: 165px;

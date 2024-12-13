@@ -148,6 +148,14 @@
 		,rest_period = #{restPeriod}
 		,reason = #{reason}
 		,is_checked = 2
+		,wday_dt_under60 = #{wdayDtUnder60}
+		,wday_dt_over60 = #{wdayDtOver60}
+		,wday_emn_under60 = #{wdayEmnUnder60}
+		,wday_emn_over60 = #{wdayEmnOver60}
+		,hday_dt_under60 = #{hdayDtUnder60}
+		,hday_dt_over60 = #{hdayDtOver60}
+		,hday_emn_under60 = #{hdayEmnUnder60}
+		,hday_emn_over60 = #{hdayEmnOver60}
 	where
 		id = #{id}
 </update>
@@ -250,14 +258,14 @@
 <select id="findManySum">
 	select
 		reports.users_id
-<!--		,sum(reports.wday_dt_under60)-->
-<!--			+ sum(reports.wday_dt_over60)-->
-<!--			+ sum(reports.wday_emn_under60)-->
-<!--			+ sum(reports.wday_emn_over60)-->
-<!--			+ sum(reports.hday_dt_under60)-->
-<!--			+ sum(reports.hday_dt_over60)-->
-<!--			+ sum(reports.hday_emn_under60)-->
-<!--			+ sum(reports.hday_emn_over60) as all_sum-->
+		,sum(reports.wday_dt_under60)
+			+ sum(reports.wday_dt_over60)
+			+ sum(reports.wday_emn_under60)
+			+ sum(reports.wday_emn_over60)
+			+ sum(reports.hday_dt_under60)
+			+ sum(reports.hday_dt_over60)
+			+ sum(reports.hday_emn_under60)
+			+ sum(reports.hday_emn_over60) as all_sum
 		,sum(reports.wday_dt_under60) as wday_dt_under60
 		,sum(reports.wday_dt_over60) as wday_dt_over60
 		,sum(reports.wday_emn_under60) as wday_emn_under60

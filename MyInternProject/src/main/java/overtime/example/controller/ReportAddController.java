@@ -126,11 +126,6 @@ public class ReportAddController {
         String requestReasonWithBr = editForDisplayService.convertNewlinesToBr(report.getRequestsReason());
         model.addAttribute("requestReasonWithBr", requestReasonWithBr);
         
-        //残業時間の初期値設定
-        //残業申請書作成時のデータを初期値として設定する
-        //TODO:報告データ修正機能を作成した場合は、1回目の更新かどうか判定して処理を分ける
-//        form.setStartTime(report.getRequestsStartTime());
-//        form.setEndTime(report.getRequestsEndTime());
 
 		return "report/add";
 	}
@@ -153,11 +148,15 @@ public class ReportAddController {
 		    List<ObjectError> endTimeErrors = bindingResult.getGlobalErrors().stream()
 		    		.filter(error -> error.getCode().contains("ReportEndAfterWorkEnd"))  
 		            .collect(Collectors.toList());
+		    List<ObjectError> restTimeStartEndErrors = bindingResult.getGlobalErrors().stream()
+		    		.filter(error -> error.getCode().contains("RestStartBeforeRestEnd"))  
+		            .collect(Collectors.toList());
 		    
 	        // モデルにエラーメッセージを追加
 	    	model.addAttribute("startEndisNullErrors", startEndisNullErrors);
 	        model.addAttribute("startTimeErrors", startTimeErrors);
 	        model.addAttribute("endTimeErrors", endTimeErrors);
+	        model.addAttribute("restTimeStartEndErrors", restTimeStartEndErrors);
 		          
 	        return getReportAdd(model, locale, form, id);
 		}
@@ -310,11 +309,15 @@ public class ReportAddController {
 		    List<ObjectError> endTimeErrors = bindingResult.getGlobalErrors().stream()
 		    		.filter(error -> error.getCode().contains("ReportEndAfterWorkEnd"))  
 		            .collect(Collectors.toList());
+		    List<ObjectError> restTimeStartEndErrors = bindingResult.getGlobalErrors().stream()
+		    		.filter(error -> error.getCode().contains("RestStartBeforeRestEnd"))  
+		            .collect(Collectors.toList());
 		    
 	        // モデルにエラーメッセージを追加
 	    	model.addAttribute("startEndisNullErrors", startEndisNullErrors);
 	        model.addAttribute("startTimeErrors", startTimeErrors);
 	        model.addAttribute("endTimeErrors", endTimeErrors);
+	        model.addAttribute("restTimeStartEndErrors", restTimeStartEndErrors);
 		          
 	        return getNewReportAdd(model, locale, form);
 		}

@@ -1,6 +1,15 @@
 # MyInternProject
 
+## 提出資料
+以下のフォルダにまとめています。
+myinternproject/doc/成果物
 
+## コード、デプロイ資産
+デプロイ手順で必要なファイルを含みます。
+myinternproject/MyInternProject
+myinternproject/src/sql
+
+デプロイ手順は成果物フォルダのファイルを参照して下さい。
 
 ## Getting started
 

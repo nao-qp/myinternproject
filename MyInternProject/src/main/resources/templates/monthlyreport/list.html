@@ -11,8 +11,20 @@
 	<div class="text-center">
 		<h3>令和6年 12月 残業報告書</h3>
 	</div>
-	<div class="row">
-		<div class="text-end">
+	<div class="row d-flex justify-content-end">
+		<div class="width-120 d-flex align-items-center justify-content-end pe-0">
+			<p class="width-120 text-end align-center mb-0">提出：</p>
+		</div>
+		<div class="width-120 d-flex align-items-center justify-content-end pe-0 ps-0">
+			<p th:if="${submitted == 1}" th:text="提出済みです。" class="text-danger pe-0 mb-0"></p>
+		</div>
+		<div class="text-end width-150" th:if="${user.role == 1}">
+			<form method="post" th:action="@{/monthlyreport/submitdata}">
+				<input type="hidden" name="submitted" value="1">
+				<button type="submit" class="btn btn-primary">人事部へ提出</button>
+			</form>
+		</div>
+		<div class="text-end width-180">
 			<a th:href="@{/export/csv/all}" class="btn btn-primary">詳細一括CSV出力</a>
 		</div>
 	</div>
@@ -42,9 +54,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="reportsSum : ${reportsSumList}"
-						th:attr="data-href=@{/monthlyreport/detail/{id}(id=${reportsSum.usersId})}"
-						style="cursor: pointer;">
+					<tr th:each="reportsSum : ${reportsSumList}">
+					<!-- プロトタイプでは個人ごと日付ごと詳細ページは実装しない -->
+<!--				<tr th:each="reportsSum : ${reportsSumList}"-->
+<!--						th:attr="data-href=@{/monthlyreport/detail/{id}(id=${reportsSum.usersId})}"-->
+<!--						style="cursor: pointer;">-->
 					<td th:text="${reportsSum.usersName}"></td>
 					<td class="text-end" th:text="${reportsSum.allSum}"></td>
 					<td class="text-end" th:text="${reportsSum.wdayDtUnder60}"></td>

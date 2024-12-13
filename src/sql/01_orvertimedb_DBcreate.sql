@@ -105,3 +105,13 @@ CREATE TABLE IF NOT EXISTS reports(
     PRIMARY KEY(id)
 ) COMMENT = '残業報告データ'
 ;
+
+CREATE TABLE IF NOT EXISTS monthlysubmitdatas(
+    id INT NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    yearmonth VARCHAR(7) NOT NULL COMMENT '年月',
+    submitted TINYINT NOT NULL DEFAULT 0 COMMENT '提出済みフラグ',
+    PRIMARY KEY(id)
+    ) COMMENT = '月次資料報告済データ'
+;
+
+    

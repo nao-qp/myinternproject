@@ -127,8 +127,17 @@
 			     <label for="restEndTime" class="col-auto col-form-label mb-2">終了時間：</label>
 			    	<input type="time" class="col-sm-2 mb-2" th:field="*{restEndTime}">
 			    <!-- カラム位置調整 -->
-   				<div class="col-sm-7"></div>
-   				
+	       		<div class="col-sm-7"></div>
+	       		<div class="col-sm-2"></div>
+
+   				<!-- バリデーション 休憩開始時間＜休憩終了時間になっているか -->
+			    <div class="error col-sm-5 d-flex align-items-center text-danger">
+					<span th:if="${restTimeStartEndErrors != null}" th:each="err : ${restTimeStartEndErrors}" 
+						th:text="${err.defaultMessage}"></span>
+				</div>
+				<!-- カラム位置調整 -->
+				<div class="col-sm-5"></div>
+
 			    <label for="reason" class="col-sm-2 col-form-label">残業報告</label>
 			    <div class="col-sm-10 my-3">
 			      <textarea class="form-control" th:field="*{reason}" rows="5"></textarea>
