@@ -1,5 +1,6 @@
 # MyInternProject
-
+## 残業管理システム
+JPT職場体験インターン提出資産です。
 ## 提出資料
 以下のフォルダにまとめています。  
 myinternproject/doc/成果物
